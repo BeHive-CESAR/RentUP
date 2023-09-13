@@ -1,1 +1,1 @@
-# Lab-is-cool
+# Laboratory
