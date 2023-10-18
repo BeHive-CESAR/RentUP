@@ -4,8 +4,10 @@ create table itens(
 	nome_item varchar(50) primary key,
 	qnt_total integer not null,
 	qnt_estoque integer not null,
+	qnt_emprestar integer not null,
 	qnt_emprestados integer not null,
-	qnt_danificados integer not null
+	qnt_danificados integer not null,
+	descricao varchar(200)
 );
 
 create table users(
