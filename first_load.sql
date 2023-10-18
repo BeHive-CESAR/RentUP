@@ -1,4 +1,4 @@
-create database lab;
+create database if not exists lab;
 
 create table itens(
 	nome_item varchar(50) primary key,
@@ -14,7 +14,15 @@ create table users(
 	id SERIAL primary key,
 	nome varchar(50) not null,
 	email varchar(100) not null,
-	item varchar(50),
-	state bool not null,
-	FOREIGN KEY (item) REFERENCES itens(nome_item)
+	senha varchar(100) not null
+);
+
+create table rent(
+	id SERIAL primary key,
+	item_nome varchar(50) not null,
+	user_id int not null,
+	data_emprestimo date not null,
+	data_deovlucao date,
+	FOREIGN KEY (item_nome) REFERENCES itens (nome_item),
+	FOREIGN KEY (user_id) REFERENCES users (id)
 );
