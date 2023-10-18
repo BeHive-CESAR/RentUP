@@ -1,7 +1,9 @@
-from entidades.Item import Item
+from api.entidades.Item import Item
 from infra.repository.itens_repository import ItensRepository
 
-class ItemMediator:      
+class ItemMediator:
+    def __init__(self) -> None:
+        self.repo = ItensRepository()    
 
     def __validate_item(self, item:Item):
         if item.qntTotal < 0 or item.qntEstoque < 0 or item.qntEmprestar < 0 or item.qntEmprestados < 0 or item.qntDanificados < 0:
@@ -14,20 +16,20 @@ class ItemMediator:
     def create_item(self, item:Item):
         validacao = self.__validate_item(item)
         if validacao:
-            ItensRepository.insert(item)
+            self.repo.insert(item)
         else:
             return validacao
     
     def edit_item(self, item1:Item, item2:Item):
         validacao = self.__validate_item(item2)
         if validacao:
-            ItensRepository.update(item1, item2)
+            self.repo.update(item1, item2)
             return validacao
         else:
             return validacao
     
-    def get_items():
-        return ItensRepository.select()
+    def get_items(self):
+        return self.repo.select()
     
-    def get_item(item:Item):
-        return ItensRepository.select_by_item(item)
+    def get_item(self, item:Item):
+        return self.repo.select_by_item(item)
