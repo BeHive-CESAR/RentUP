@@ -1,4 +1,4 @@
-create database if not exists lab;
+create database if not exists rentup;
 
 create table itens(
 	nome_item varchar(50) primary key,

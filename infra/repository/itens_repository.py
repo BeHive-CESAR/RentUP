@@ -60,7 +60,7 @@ class ItensRepository:
                 db.session.rollback()
                 raise erro
     
-    def update_loan(self, item:Itens):
+    def update_rent(self, item:Itens):
         with DBConnectionHandler() as db:
             try:
                 data = self.select_by_item(item)
