@@ -10,9 +10,11 @@ class Itens(Base):
     nome_item = Column(String, primary_key=True)
     qnt_total = Column(Integer, nullable=False)
     qnt_estoque = Column(Integer, nullable=False)
+    qnt_emprestar = Column(Integer, nullable=False)
     qnt_emprestados = Column(Integer, nullable=False)
     qnt_danificados = Column(Integer, nullable=False)
-    emprestimos = relationship('User', backref='users', lazy='subquery')
+    descricao = Column(String, nullable=True)
+    # emprestimos = relationship('User', backref='users', lazy='subquery')
 
     def __repr__(self):
         return f'[Item {self.nome_item}, Total {self.qnt_total}, Estoque {self.qnt_estoque}, Emprestados {self.qnt_emprestados}]'

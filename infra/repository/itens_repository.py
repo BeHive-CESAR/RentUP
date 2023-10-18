@@ -7,17 +7,10 @@ import pandas as pd
 
 class ItensRepository:
     '''Essa class é responsavel por conter os metodos que vamos precisar pro CRUD'''
-    def insert(self, nome_item:str, qnt_total:int, qnt_estoque:int, qnt_emprestimos:int, qnt_danificados:int):
+    def insert(self, item:Itens):
         with DBConnectionHandler() as db:
             try:
-                data_insert = Itens(
-                    nome_item=nome_item.capitalize(),
-                    qnt_total=qnt_total,
-                    qnt_estoque=qnt_estoque,
-                    qnt_emprestados=qnt_emprestimos,
-                    qnt_danificados = qnt_danificados
-                )
-                db.session.add(data_insert)
+                db.session.add(item)
                 db.session.commit()
             except Exception as erro:
                 db.session.rollback()
@@ -31,44 +24,47 @@ class ItensRepository:
             except Exception as erro:
                 raise erro
     
-    def select_by_item(self, nome_item:str):
+    def select_by_item(self, item:Itens):
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Itens).filter(Itens.nome_item==nome_item.capitalize()).one()
+                data = db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).one()
                 return data
             except NoResultFound:
                 return None
             except Exception as erro:
                 raise erro
     
-    def delete(self, nome_item:str):
+    def delete(self, item:Itens):
         with DBConnectionHandler() as db:
             try:
-                db.session.query(Itens).filter(Itens.nome_item==nome_item.capitalize()).delete()
+                db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).delete()
                 db.session.commit()
             except Exception as erro:
                 db.session.rollback()
                 raise erro
     
-    def update(self, nome_item:str, qnt_total:int, qnt_estoque:int, qnt_emprestados:int, qnt_danificados:int):
+    def update(self, item:Itens, item2:Itens):
         with DBConnectionHandler() as db:
             try:
-                db.session.query(Itens).filter(Itens.nome_item==nome_item.capitalize()).update({
-                    'qnt_total': qnt_total,
-                    'qnt_estoque': qnt_estoque,
-                    'qnt_emprestados': qnt_emprestados,
-                    'qnt_danificados': qnt_danificados
+                db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).update({
+                    'nome_item':item2.nome_item,
+                    'qnt_total': item2.qnt_total,
+                    'qnt_estoque': item2.qnt_estoque,
+                    'qnt_emprestar':item2.qnt_emprestar,
+                    'qnt_emprestados': item2.qnt_emprestados,
+                    'qnt_danificados': item2.qnt_danificados,
+                    'descricao': item2.descricao
                 })
                 db.session.commit()
             except Exception as erro:
                 db.session.rollback()
                 raise erro
     
-    def update_loan(self, nome_item:str):
+    def update_loan(self, item:Itens):
         with DBConnectionHandler() as db:
             try:
-                data = self.select_by_item(nome_item)
-                db.session.query(Itens).filter(Itens.nome_item==nome_item.capitalize()).update(
+                data = self.select_by_item(item)
+                db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).update(
                     {
                         'qnt_estoque':data.qnt_estoque-1,
                         'qnt_emprestados':data.qnt_emprestados+1
@@ -79,11 +75,11 @@ class ItensRepository:
                 db.session.rollback()
                 raise erro
     
-    def update_return(self, nome_item:str):
+    def update_return(self, item:Itens):
         with DBConnectionHandler() as db:
             try:
-                data = self.select_by_item(nome_item)
-                db.session.query(Itens).filter(Itens.nome_item==nome_item.capitalize()).update(
+                data = self.select_by_item(item)
+                db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).update(
                     {
                         'qnt_estoque':data.qnt_estoque+1,
                         'qnt_emprestados':data.qnt_emprestados-1
