@@ -16,20 +16,23 @@ class ItemMediator:
     def create_item(self, item:Item):
         validacao = self.__validate_item(item)
         if validacao:
-            self.repo.insert(item)
+            self.repo.insert(item.to_banco())
         else:
             return validacao
     
     def edit_item(self, item1:Item, item2:Item):
         validacao = self.__validate_item(item2)
         if validacao:
-            self.repo.update(item1, item2)
+            self.repo.update(item1.to_banco(), item2.to_banco())
             return validacao
         else:
             return validacao
+    
+    def delete_item(self, item:Item):
+        self.repo.delete(item.to_banco())
     
     def get_items(self):
         return self.repo.select()
     
     def get_item(self, item:Item):
-        return self.repo.select_by_item(item)
+        return self.repo.select_by_item(item.to_banco())
