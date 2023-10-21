@@ -11,10 +11,10 @@ create table itens(
 );
 
 create table users(
-	id SERIAL primary key,
 	nome varchar(50) not null,
-	email varchar(100) not null,
-	senha varchar(100) not null
+	email varchar(100) not null primary key,
+	senha varchar(100) not null,
+	papel varchar(50) not null
 );
 
 create table rent(
