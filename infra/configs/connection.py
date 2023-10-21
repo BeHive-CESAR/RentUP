@@ -8,7 +8,8 @@ class DBConnectionHandler:
     def __init__(self):
         '''Metodo inicial que define o nosso "link" de conexão com o banco especificado'''
 
-        self.__connection_string = config('STRING')
+        self.__connection_string = config('CONNECT')
+        # self.__connection_string = "postgresql+pg8000://postgres:0805@localhost:5432/RentUP"
         self.__engine = self.__create_database_egine()
         self.session = None
 
