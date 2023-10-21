@@ -9,16 +9,24 @@ class UserRepository:
     def insert(self, users:User):
         with DBConnectionHandler() as db:
             try:
-                db.session.add(User)
+                db.session.add(users)
                 db.session.commit()
             except Exception as erro:
                 db.session.rollback()
                 raise erro
     
-    def select_by_name_email(self, User:str, email:str):
+    def select(self):
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(User).filter(User.nome and User.email==email).all()
+                data = db.session.query(User).all()
+                return data
+            except Exception as erro:
+                raise erro
+    
+    def select_by_email(self, user:User):
+        with DBConnectionHandler() as db:
+            try:
+                data = db.session.query(User).filter(User.email==user.email).one()
                 return data
             except Exception as erro:
                 raise erro
@@ -32,14 +40,14 @@ class UserRepository:
                 db.session.rollback()
                 raise erro
     
-    def update(self, user:User):
+    def update(self, user:User, user2:User):
         with DBConnectionHandler() as db:
             try:
-                db.session.query(User).filter(User.nome_item==item.nome_item.capitalize()).update({
-                    'nome_usuario':user.nome,
-                    'email': user.email,
-                    'senha': user.senha,
-                    'role': user.role,
+                db.session.query(User).filter(User.email==user.email).update({
+                    'nome':user2.nome,
+                    'email': user2.email,
+                    'senha': user2.senha,
+                    'papel': user2.papel,
                 })
                 db.session.commit()
             except Exception as erro:

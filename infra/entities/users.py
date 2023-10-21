@@ -9,7 +9,7 @@ class User(Base):
     nome = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True, primary_key=True)
     senha = Column(String, nullable=False)
-    role = Column(String, nullable=False)
+    papel = Column(String, nullable=False)
 
     def __repr__(self):
-        return f'[Nome: {self.nome}, item emprestado: {self.item}, email: {self.email}]'
+        return f'[Nome: {self.nome}, email: {self.email}, role: {self.papel}]'

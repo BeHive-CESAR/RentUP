@@ -1,6 +1,6 @@
 from pydantic import BaseModel
-from .Item import Item
 from .Role import Role
+from infra.entities.users import User
 
 class Users(BaseModel):
     nome: str
@@ -10,10 +10,10 @@ class Users(BaseModel):
 
     def to_banco(self):
         '''Metodo que retorna classe Itens para o banco de dados'''
-        data_insert = Users(
+        data_insert = User(
                     nome=self.nome,
                     email=self.email,
                     senha=self.password,
-                    role=self.role,
+                    papel=self.role.name,
                 )
         return data_insert
