@@ -6,10 +6,10 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String, nullable=False)
-    email = Column(String, nullable=False, unique=True)
+    email = Column(String, nullable=False, unique=True, primary_key=True)
     senha = Column(String, nullable=False)
+    role = Column(String, nullable=False)
 
     def __repr__(self):
-        return f'[Nome: {self.nome}, item emprestado: {self.item}, Estado: {self.state}]'
+        return f'[Nome: {self.nome}, item emprestado: {self.item}, email: {self.email}]'
