@@ -1,4 +1,4 @@
-create database if not exists rentup;
+create database rentup;
 
 create table itens(
 	nome_item varchar(50) primary key,
@@ -22,7 +22,7 @@ create table rent(
 	item_nome varchar(50) not null,
 	user_id int not null,
 	data_emprestimo date not null,
-	data_deovlucao date,
+	data_devolucao date,
 	FOREIGN KEY (item_nome) REFERENCES itens (nome_item),
 	FOREIGN KEY (user_id) REFERENCES users (id)
 );
