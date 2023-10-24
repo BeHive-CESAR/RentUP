@@ -21,8 +21,8 @@ create table rent(
 	id SERIAL primary key,
 	item_nome varchar(50) not null,
 	user_email varchar(100) not null,
-	data_emprestimo date not null,
-	data_devolucao date,
+	data_emprestimo timestamp not null,
+	data_devolucao timestamp,
 	FOREIGN KEY (item_nome) REFERENCES itens (nome_item),
 	FOREIGN KEY (user_email) REFERENCES users (email)
 );
