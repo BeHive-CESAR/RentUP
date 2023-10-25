@@ -3,7 +3,7 @@ from typing import Optional
 from infra.entities.itens import Itens
 
 class Item(BaseModel):
-    '''Classe para representar Itens à API'''
+    '''Classe para representar Itens que vêm da API'''
     nome: str
     qntTotal: Optional[int] = 0
     qntEstoque: Optional[int] = 0
@@ -14,7 +14,7 @@ class Item(BaseModel):
     imagem: Optional[str] = None
 
     def to_banco(self):
-        '''Metodo que retorna classe Itens para o banco de dados'''
+        '''Metodo que tranforma o objeto Item em um Itens para o banco de dados'''
         data_insert = Itens(
                     nome_item=self.nome.capitalize(),
                     qnt_total=self.qntTotal,
