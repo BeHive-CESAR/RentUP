@@ -19,10 +19,11 @@ create table users(
 
 create table rent(
 	id SERIAL primary key,
-	item_nome varchar(50) not null,
 	user_email varchar(100) not null,
+	item_nome varchar(50) not null,
 	data_emprestimo timestamp not null,
 	data_devolucao timestamp,
+	estado varchar(50) not null,
 	FOREIGN KEY (item_nome) REFERENCES itens (nome_item),
 	FOREIGN KEY (user_email) REFERENCES users (email)
 );

@@ -1,7 +1,7 @@
 '''Aqui usamos uma classe para criar nossa tabela e seus respectivos atributos'''
 
 from infra.configs.base import Base
-from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
+from sqlalchemy import Column, String, Integer, Boolean
 
 class User(Base):
     '''Classe responsavel por espelhar um user da tabela users no banco de dados'''
