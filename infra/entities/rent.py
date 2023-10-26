@@ -12,4 +12,10 @@ class Rent(Base):
     item_nome = Column(String, nullable=False)
     data_emprestimo = Column(DateTime, nullable=False)
     data_devolucao = Column(DateTime, nullable=False)
-    status = Column(String, nullable=False)
+    estado = Column(String, nullable=False)
+
+    def __repr__(self):
+        '''Metodo mágico que é usado para representar o objeto como uma string que pode ser usada para criar um novo objeto com os mesmos valores.'''
+        return f'[Id: {self.id}, usuário: {self.user_email}, item: {self.item_nome}, 
+        data emprestimo: {self.data_emprestimo}, data devolução: {self.data_devolucao}, estado: {self.estado}]'
+

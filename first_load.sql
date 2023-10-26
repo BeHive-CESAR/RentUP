@@ -17,7 +17,7 @@ create table users(
 	papel varchar(50) not null
 );
 
-create table rent(
+create table rents(
 	id SERIAL primary key,
 	user_email varchar(100) not null,
 	item_nome varchar(50) not null,
