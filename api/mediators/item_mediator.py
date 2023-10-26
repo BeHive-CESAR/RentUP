@@ -74,3 +74,5 @@ class ItemMediator:
         item -- Objeto do tipo Item que será buscado
         '''
         return self.repo.select_by_item(item.to_banco())
+    
+    
