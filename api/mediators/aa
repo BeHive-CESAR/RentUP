@@ -22,12 +22,22 @@ class UserMediator:
         if self.user_repository.select(name):
             raise ValueError("Esse nome ja existe.")
 
-    #def create_user(self, user):
+    def create_user(self, user):
+        # Lógica para criar um novo usuário
+        pass
 
-   # def get_users(self):
+    def get_users(self):
+        # Lógica para obter todos os usuários
+        pass
 
-    #def get_user(self, user_id):
+    def get_user(self, user_id):
+        # Lógica para obter um usuário específico
+        pass
 
-    #def edit_user(self, original_user, updated_user):
+    def edit_user(self, original_user, updated_user):
+        # Lógica para editar um usuário
+        pass
 
-  #  def delete_user(self, user_id):
+    def delete_user(self, user_id):
+        # Lógica para deletar um usuário
+        pass
