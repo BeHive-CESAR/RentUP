@@ -1,10 +1,19 @@
 import re
-from infra.repository.user_repository import UserRepository
+from datetime import datetime, timedelta
+from fastapi import status
+from decouple import config
+from jose import jwt, JWTError
+from passlib.context import CryptContext
+from fastapi.exceptions import HTTPException
 from api.entidades.Users import Users, User
+from infra.repository.user_repository import UserRepository
 
 class UserMediator:
     def __init__(self):
         self.user_repository = UserRepository()
+        self.crypt_context = CryptContext(schemes=['sha256_crypt'])
+        self.SECRET_KEY = config('SECRET_KEY')
+        self.ALGORITHM = config('ALGORITHM')
 
     def __validate_email(self, email: str):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
@@ -37,7 +46,14 @@ class UserMediator:
         self.__validate_email(user.email)
         self.__validate_password(user.password)
         # self.__validate_name(user.nome)
-        self.user_repository.insert(user.to_banco())
+
+        user_db = User(
+            nome=user.nome,
+            email=user.email,
+            senha=self.crypt_context.hash(user.password),
+            papel=user.role.name
+        )
+        self.user_repository.insert(user_db)
 
     def get_users(self):
         return self.user_repository.select()
@@ -58,3 +74,49 @@ class UserMediator:
     def delete_user(self, email: str):
         user_to_delete = User(email=email)
         self.user_repository.delete(user_to_delete)
+
+    def user_login(self, user:Users, expires_in:int=60):
+        user_on_db = self.get_user_by_email(user.email)
+
+        if user_on_db is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Email ou senha invalido'
+            )
+        if not self.crypt_context.verify(user.password, user_on_db.senha):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Email ou senha invalido'
+            )
+
+        exp = datetime.utcnow() + timedelta(minutes=expires_in)
+
+        payload = {
+            'sub': user.email,
+            'exp': exp
+        }
+
+        acess_token = jwt.encode(payload, self.SECRET_KEY, algorithm=self.ALGORITHM)
+
+        return {
+            'acess_token': acess_token,
+            'exp': exp.isoformat()
+        }
+    
+    def verify_token(self, acess_token):
+        try:
+            data = jwt.decode(acess_token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
+        except JWTError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Token de acesso invalido'
+            )
+        
+        user_on_db = self.get_user_by_email(data['sub'])
+
+        if user_on_db is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Token de acesso invalido'
+            )
+        
