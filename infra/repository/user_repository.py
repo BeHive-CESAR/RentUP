@@ -2,6 +2,7 @@
 
 from infra.entities.users import User
 from infra.configs.connection import DBConnectionHandler
+from sqlalchemy.orm.exc import NoResultFound
 
 class UserRepository:
     '''Essa class é responsavel por conter os metodos que vamos precisar pro CRUD'''
@@ -30,7 +31,7 @@ class UserRepository:
             except Exception as erro:
                 raise erro
     
-    def select_by_email(self, user:User):
+    def select_by_email(self, email:str):
         '''Metodo responsavel por, através do email, buscar o User correspondente no banco de dados
         
         Keyword arguments:
@@ -39,8 +40,10 @@ class UserRepository:
         '''
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(User).filter(User.email==user.email).one()
+                data = db.session.query(User).filter(User.email==email).one()
                 return data
+            except NoResultFound:
+                return None
             except Exception as erro:
                 raise erro
     
