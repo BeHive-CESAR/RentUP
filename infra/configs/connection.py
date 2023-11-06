@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from decouple import config
+from infra.entities import itens, users, rent
 
 class DBConnectionHandler:
     '''Classe que permitirá a conexão com o banco de dados'''
@@ -21,9 +22,14 @@ class DBConnectionHandler:
         '''Caso precise, podemos ver nossa engine que é a nossa conexão com o banco'''
         return self.__engine
 
+    def create_all_tables(self):
+        itens.Base.metadata.create_all(bind=self.__engine)
+        users.Base.metadata.create_all(bind=self.__engine)
+        rent.Base.metadata.create_all(bind=self.__engine)
+
     def __enter__(self):
         '''Método mágico que é executado ao entrar em um bloco with'''
-        session_make = sessionmaker(bind=self.__engine)
+        session_make = sessionmaker(autocommit=False, autoflush=False, bind=self.__engine)
         self.session = session_make()
         return self
     
