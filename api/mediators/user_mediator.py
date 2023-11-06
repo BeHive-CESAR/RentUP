@@ -2,11 +2,12 @@ import re
 from datetime import datetime, timedelta
 from fastapi import status
 from decouple import config
-from jose import jwt, JWTError
+import jwt
 from passlib.context import CryptContext
 from fastapi.exceptions import HTTPException
 from api.entidades.Users import Users, User
 from infra.repository.user_repository import UserRepository
+
 
 class UserMediator:
     def __init__(self):
@@ -92,31 +93,25 @@ class UserMediator:
         exp = datetime.utcnow() + timedelta(minutes=expires_in)
 
         payload = {
-            'sub': user.email,
-            'exp': exp
+            'exp': exp,
+            'iat': datetime.utcnow(),
+            'sub': user.email
         }
 
-        acess_token = jwt.encode(payload, self.SECRET_KEY, algorithm=self.ALGORITHM)
-
-        return {
-            'acess_token': acess_token,
-            'exp': exp.isoformat()
-        }
+        return jwt.encode(payload, self.SECRET_KEY, algorithm=self.ALGORITHM)
     
-    def verify_token(self, acess_token):
+    def verify_token(self, token):
+        print(token)
         try:
-            data = jwt.decode(acess_token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
-        except JWTError:
+            payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Token de acesso invalido'
+                detail='Signature has expired'
             )
-        
-        user_on_db = self.get_user_by_email(data['sub'])
-
-        if user_on_db is None:
+        except jwt.InvalidTokenError as e:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Token de acesso invalido'
+                detail='Invalid Token'
             )
-        
