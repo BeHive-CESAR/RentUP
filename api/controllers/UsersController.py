@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
-from api.mediators.user_mediator import UserMediator, Users
-from api.depends import auth_wrapper
+from api.mediators.user_mediator import UserMediator, Users, UserAuth
 
 
 class UsersController:
@@ -17,18 +16,10 @@ class UsersController:
             )
         
         @self.router.post('/login')
-        async def user_login(user: Users):
+        async def user_login(user: UserAuth):
 
             auth_data = UserMediator().user_login(user=user)
             return JSONResponse(
                 content=auth_data,
                 status_code=status.HTTP_200_OK
             )
-
-        @self.router.get('/unprotected')
-        async def unprotected():
-            return { 'hello': 'world' }
-        
-        @self.router.get('/protected')
-        def protected(username=Depends(auth_wrapper)):
-            return { 'name': username }
