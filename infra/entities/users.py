@@ -1,7 +1,7 @@
 '''Aqui usamos uma classe para criar nossa tabela e seus respectivos atributos'''
 
 from infra.configs.base import Base
-from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy import Column, String
 
 class User(Base):
     '''Classe responsavel por espelhar um user da tabela users no banco de dados'''
@@ -10,6 +10,7 @@ class User(Base):
     nome = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True, primary_key=True)
     senha = Column(String, nullable=False)
+    contato = Column(String, nullable=False)
     papel = Column(String, nullable=False)
 
     def __repr__(self):
