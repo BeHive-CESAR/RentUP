@@ -3,12 +3,16 @@ from typing import Optional
 from .Role import Role
 from infra.entities.users import User
 
-class Users(BaseModel):
-    '''Classe para representar Users que vêm da API'''
-    nome: Optional[str] = 'Default'
+
+class UserAuth(BaseModel):
     email: str
     password: str
-    role: Optional[Role] = Role.USER
+
+class Users(UserAuth):
+    '''Classe para representar Users que vêm da API'''
+    nome: str 
+    contato: str
+    role: Role = Role.USER
 
     def to_banco(self):
         '''Metodo que tranforma o objeto Users em um User para o banco de dados'''
@@ -16,6 +20,9 @@ class Users(BaseModel):
                     nome=self.nome,
                     email=self.email,
                     senha=self.password,
-                    papel=self.role.name,
+                    contato=self.contato,
+                    papel=self.role.name
                 )
+        
         return data_insert
+
