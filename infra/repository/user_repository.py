@@ -82,3 +82,12 @@ class UserRepository:
             except Exception as erro:
                 db.session.rollback()
                 raise erro
+            
+    def select_by_name(self, nome:str):
+        with DBConnectionHandler() as db:
+            try:
+                return db.session.query(User).filter(User.nome==nome).all()
+            except NoResultFound:
+                return None
+            except Exception as erro:
+                raise erro       

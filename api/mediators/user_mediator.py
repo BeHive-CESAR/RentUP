@@ -17,7 +17,7 @@ class UserMediator:
         self.SECRET_KEY = config('SECRET_KEY')
         self.ALGORITHM = config('ALGORITHM')
 
-    def __validate_email(self, email: str):
+    def __validate_email(self, email:str):
         ''' Método responsavel por validar email
 
         Keyword arguments:
@@ -31,7 +31,7 @@ class UserMediator:
         if not re.search(regex, email):
             raise ValueError("Email invalido")
 
-    def __validate_password(self, password: str):
+    def __validate_password(self, password:str):
         '''Método responsavel por validar a senha
         
         Keyword arguments:
@@ -47,7 +47,7 @@ class UserMediator:
         if not any(char in '!@#$%^&*()_+,' for char in password):
             raise ValueError("A senha deve ter um caractere especial.")
 
-    def __validate_name(self, name: str):
+    def __validate_name(self, name:str):
         '''Método responsavel por validar o nome
         
         Keyword arguments:
@@ -62,7 +62,7 @@ class UserMediator:
         # O nome só pode ter letras e números
         # Pode ter mais de um usuario com o mesmo nome 
 
-    def create_user(self, user: Users):
+    def create_user(self, user:Users):
         '''Método responsavel por, após validações, criar um usuario no banco de dados
         com senha criptografada
         
@@ -88,7 +88,7 @@ class UserMediator:
         '''Retorna todos os usuarios cadastrados no banco'''
         return self.user_repository.select()
 
-    def get_user_by_email(self, email: str):
+    def get_user_by_email(self, email:str):
         '''Retotnra um usuario especifico a partir do email
         
         Keyword arguments:
@@ -96,8 +96,17 @@ class UserMediator:
         email -- str para busca do usuario
         '''
         return self.user_repository.select_by_email(email)
+    
+    def get_user_by_name(self, nome:str):
+        '''Retotnra um usuario especifico a partir do nome
+        
+        Keyword arguments:
 
-    def edit_user(self, original_email: str, updated_user: Users):
+        nome -- str para busca do usuario
+        '''
+        return self.user_repository.select_by_name(nome)
+
+    def edit_user(self, original_email:str, updated_user:Users):
         '''Realiza a validação do email e verifica se o mesmo existe no banco. Caso esteja tudo OK acessa o usuario e edita-o. Caso não retorna uma mensagem de erro
 
         Keyword arguments:
@@ -115,7 +124,7 @@ class UserMediator:
 
         self.user_repository.update(original_user, updated_user.to_banco())
 
-    def delete_user(self, email: str):
+    def delete_user(self, email:str):
         '''Metodo responsavel por deletar um user do banco de dados
 
         Keyword arguments:
