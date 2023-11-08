@@ -180,13 +180,13 @@ class UsersController:
                 status_code=status.HTTP_200_OK
             )
 
-        @self.router.put('/edit-user')
-        async def edit_user(email:str, user:Users, token_verify=Depends(auth_wrapper)):
-            UserMediator().edit_user(email, user)
-            return JSONResponse(
-                content={'Editado': 'Lucas'},
-                status_code=status.HTTP_200_OK
-            )
+        # @self.router.put('/edit-user')
+        # async def edit_user(email:str, user:Users, token_verify=Depends(auth_wrapper)):
+        #     UserMediator().edit_user(email, user)
+        #     return JSONResponse(
+        #         content={'Editado': 'Lucas'},
+        #         status_code=status.HTTP_200_OK
+        #     )
 
         @self.router.delete('/delete-user')
         async def user_delete(email:str, token_verify=Depends(auth_wrapper)):

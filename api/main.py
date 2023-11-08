@@ -3,8 +3,6 @@ from api.rotas import router
 from infra.configs.connection import DBConnectionHandler
 
 description = '''
-# **RentUP APIa**
-
 A **RentUP API** foi desenvolvida para resolver os desafios de gerenciamento de estoque e empréstimos em laboratórios maker.
 
 ## Itens
