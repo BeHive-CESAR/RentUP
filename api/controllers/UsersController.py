@@ -180,45 +180,82 @@ class UsersController:
                 status_code=status.HTTP_200_OK
             )
 
-        # @self.router.put('/edit-user')
-        # async def edit_user(email:str, user:Users, token_verify=Depends(auth_wrapper)):
-        #     UserMediator().edit_user(email, user)
-        #     return JSONResponse(
-        #         content={'Editado': 'Lucas'},
-        #         status_code=status.HTTP_200_OK
-        #     )
-
-        @self.router.delete('/delete-user')
-        async def user_delete(email:str, token_verify=Depends(auth_wrapper)):
+        @self.router.put('/edit-user')
+        async def edit_user(email:str, user:Users, token_verify=Depends(auth_wrapper)):
             '''
-            ### Deletar Usuário por Email
+            ### Editar Usuário por Email
 
-            Deleta  um usuário específico com base no seu email.
+            Edita as informações de um usuário com base no seu endereço de e-mail.
 
-            **Endpoint:** `GET /user/delete-user?email={email}`
+            **Endpoint:** `PUT /user/edit-user?email={email}`
 
             **Parâmetros da Requisição:**
-            - **email** (string): O endereço de e-mail do usuário.
+            - **email** (string): O endereço de e-mail do usuário que deseja editar.
+            - **email** (string): Novo endereço de e-mail.
+            - **password** (string): Nova senha do usuário.
+            - **nome** (string): Novo nome do usuário.
+            - **contato** (string): Novo número de telefone do usuário.
+            - **cargo** (string): Novo cargo ou função do usuário.
 
             **Códigos de Resposta:**
-            - **200 OK**: A solicitação foi bem-sucedida.
-            - **404 Not Found**: Nenhum usuário com o nome especificado foi encontrado no sistema.
+            - **200 OK**: A edição do usuário foi bem-sucedida. As informações do usuário foram atualizadas com sucesso.
+            - **404 Not Found**: Nenhum usuário com o email especificado foi encontrado no sistema.
 
             **Exemplo de Uso:**
             ```python
             import requests
 
-            email = "email_usuario@example.com"
+            email_do_usuario = "usuario@example.com"
+            novos_dados = {
+                "password": "nova_senha_segura",
+                "nome": "Novo Nome",
+                "contato": "+9876543210",
+                "cargo": "User"
+            }
 
-            response = requests.get(f"https://rentup.com/user/delete-user?email={email}")
+            response = requests.put(f"https://exemplo.com/user/edit-user?email={email_do_usuario}", data=novos_dados)
             if response.status_code == 200:
-                usuario = response.json()
-                print(f"Informações do usuário {nome_do_usuario}:{usuario}")
+                print(f"Informações do usuário com o email {email_do_usuario} foram atualizadas com sucesso.")
             else:
-                print(f"Usuário com o nome {nome_do_usuario} não encontrado no sistema.")
+                print(f"Nenhum usuário com o email {email_do_usuario} encontrado para edição.")
+            '''
+            UserMediator().edit_user(email, user)
+            return JSONResponse(
+                content={'Edição bem sucedida': 'Sucesso'},
+                status_code=status.HTTP_200_OK
+            )
+
+        @self.router.delete('/delete-user')
+        async def user_delete(email:str, token_verify=Depends(auth_wrapper)):
+            '''
+            ### Excluir Usuário por Email
+
+            Exclui um usuário com base no seu endereço de e-mail.
+
+            **Endpoint:** `DELETE /user/delete-user?email={email}`
+
+            **Parâmetros da Requisição:**
+            - **email** (string): O endereço de e-mail do usuário que deseja excluir.
+
+            **Códigos de Resposta:**
+            - **204 No Content**: A exclusão do usuário foi bem-sucedida. O usuário com o email especificado foi removido do sistema.
+            - **404 Not Found**: Nenhum usuário com o email especificado foi encontrado no sistema.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            email_do_usuario = "usuario@example.com"
+
+            response = requests.delete(f"https://rentup.com/user/delete-user?email={email_do_usuario}")
+            if response.status_code == 204:
+                print(f"Usuário com o email {email_do_usuario} foi excluído com sucesso.")
+            else:
+                print(f"Nenhum usuário com o email {email_do_usuario} encontrado para exclusão.")
+
             '''
             UserMediator().delete_user(email)
             return JSONResponse(
-                content='Usuário deletado com sucesso',
-                status_code=status.HTTP_200_OK
+                content={'Usuário deletado com sucesso'},
+                status_code=status.HTTP_204_NO_CONTENT
             )
