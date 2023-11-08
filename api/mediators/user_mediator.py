@@ -74,13 +74,14 @@ class UserMediator:
 
         name -- str que será validado
         '''
-        existing_user = self.user_repository.select(Users(name=name))
-        if existing_user:
-            raise ValueError("Esse nome já existe.")
+        if len(name) < 3:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve ter pelo menos 3 digitos")
         
-        # Validar se o nome tem mais de 2 caracteres
-        # O nome só pode ter letras e números
-        # Pode ter mais de um usuario com o mesmo nome 
+        if len(name) > 50:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve ter no máximo 50 caracteres")
+        
+        if not re.match(r"^[a-zA-ZÀ-ÖØ-öø-ÿ]+$", name):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve conter apenas letras")
 
     def create_user(self, user:Users):
         '''Método responsavel por, após validações, criar um usuario no banco de dados
@@ -91,9 +92,9 @@ class UserMediator:
         user - objeto do tipo Users que será gravado no banco
         '''
 
-        validate_email = self.__validate_email(user.email)
-        validate_password = self.__validate_password(user.password)
-        # self.__validate_name(user.nome)
+        self.__validate_email(user.email)
+        self.__validate_password(user.password)
+        self.__validate_name(user.nome)
 
         user_db = User(
             nome=user.nome,
@@ -137,13 +138,30 @@ class UserMediator:
         updated_user -- Objeto do tipo Users que deverá possuir os novos dados para substituir o original_email no banco
         '''
         original_user = self.get_user_by_email(original_email)
-        if original_user.email != updated_user.email:
-            self.__validate_email(updated_user.email)
+
+        if original_user is None:
+            raise HTTPException(
+                detail='Usuário não encontrado',
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
         if original_user.nome != updated_user.nome:
             self.__validate_name(updated_user.nome)
+
+        if original_user.email != updated_user.email:
+            self.__validate_email(updated_user.email)
+        
         self.__validate_password(updated_user.password)
 
-        self.user_repository.update(original_user, updated_user.to_banco())
+        novo_user = User(
+            nome=updated_user.nome,
+            email=updated_user.email,
+            senha=self.crypt_context.hash(updated_user.password),
+            contato=updated_user.contato,
+            papel=updated_user.role.name
+        )
+
+        self.user_repository.update(original_user, novo_user)
 
     def delete_user(self, email:str):
         '''Metodo responsavel por deletar um user do banco de dados
