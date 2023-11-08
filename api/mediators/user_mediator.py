@@ -95,11 +95,6 @@ class UserMediator:
         validate_password = self.__validate_password(user.password)
         # self.__validate_name(user.nome)
 
-        if validate_email:
-            return validate_email
-        if validate_password:
-            return validate_password
-
         user_db = User(
             nome=user.nome,
             email=user.email,
@@ -108,8 +103,6 @@ class UserMediator:
             papel=user.role.name
         )
         self.user_repository.insert(user_db)
-
-        return False
         
 
     def get_users(self):
@@ -159,7 +152,12 @@ class UserMediator:
 
         email -- str que representa o email do usuario que será deletado
         '''
-        user_to_delete = User(email=email)
+        user_to_delete = self.get_user_by_email(email)
+        if user_to_delete is None:
+            raise HTTPException(
+                detail='Usuário não encontrado',
+                status_code=status.HTTP_404_NOT_FOUND
+            )
         self.user_repository.delete(user_to_delete)
 
     def user_login(self, user:UserAuth, expires_in:int=5):

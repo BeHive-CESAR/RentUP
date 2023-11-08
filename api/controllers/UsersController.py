@@ -42,7 +42,7 @@ class UsersController:
                 "cargo": "USER"
             }
 
-            response = requests.post("https://exemplo.com/user/register", data=data)
+            response = requests.post("https://rentup.com/user/register", data=data)
             if response.status_code == 201:
                 print("Novo usuário registrado com sucesso.")
             else:
@@ -145,7 +145,7 @@ class UsersController:
 
             Recupera informações de um usuário específico com base no seu nome.
 
-            **Endpoint:** `GET /api/get-user-by-name?nome={nome}`
+            **Endpoint:** `GET /user/get-user-by-name?nome={nome}`
 
             **Parâmetros da Requisição:**
             - **nome** (string): O nome do usuário que deseja consultar.
@@ -160,7 +160,7 @@ class UsersController:
 
             nome_do_usuario = "NomeUsuario"
 
-            response = requests.get(f"https://exemplo.com/api/get-user-by-name?nome={nome_do_usuario}")
+            response = requests.get(f"https://rentup.com/user/get-user-by-name?nome={nome_do_usuario}")
             if response.status_code == 200:
                 usuario = response.json()
                 print(f"Informações do usuário {nome_do_usuario}:{usuario}")
@@ -172,8 +172,8 @@ class UsersController:
             user_data = [{'nome': user.nome, 'email': user.email, 'contato': user.contato, 'role': user.papel} for user in users_list]
             if len(users_list) == 0:
                 return JSONResponse(
-                content=user_data,
-                status_code=status.HTTP_404_NOT_FOUND
+                    content=user_data,
+                    status_code=status.HTTP_404_NOT_FOUND
                 )
             return JSONResponse(
                 content= user_data,
@@ -190,8 +190,35 @@ class UsersController:
 
         @self.router.delete('/delete-user')
         async def user_delete(email:str, token_verify=Depends(auth_wrapper)):
+            '''
+            ### Deletar Usuário por Email
+
+            Deleta  um usuário específico com base no seu email.
+
+            **Endpoint:** `GET /user/delete-user?email={email}`
+
+            **Parâmetros da Requisição:**
+            - **email** (string): O endereço de e-mail do usuário.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A solicitação foi bem-sucedida.
+            - **404 Not Found**: Nenhum usuário com o nome especificado foi encontrado no sistema.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            email = "email_usuario@example.com"
+
+            response = requests.get(f"https://rentup.com/user/delete-user?email={email}")
+            if response.status_code == 200:
+                usuario = response.json()
+                print(f"Informações do usuário {nome_do_usuario}:{usuario}")
+            else:
+                print(f"Usuário com o nome {nome_do_usuario} não encontrado no sistema.")
+            '''
             UserMediator().delete_user(email)
             return JSONResponse(
-                content={'Deletado': 'Sucesso'},
-                status_code=status.HTTP_201_CREATED
+                content='Usuário deletado com sucesso',
+                status_code=status.HTTP_200_OK
             )
