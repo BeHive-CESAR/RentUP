@@ -257,6 +257,6 @@ class UsersController:
             '''
             UserMediator().delete_user(email)
             return JSONResponse(
-                content={'Usuário deletado com sucesso'},
                 status_code=status.HTTP_204_NO_CONTENT
             )
+        

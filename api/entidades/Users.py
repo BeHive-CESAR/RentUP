@@ -13,15 +13,3 @@ class Users(UserAuth):
     contato: str
     role: Role = Role.USER
 
-    def to_banco(self):
-        '''Metodo que tranforma o objeto Users em um User para o banco de dados'''
-        data_insert = User(
-                    nome=self.nome,
-                    email=self.email,
-                    senha=self.password,
-                    contato=self.contato,
-                    papel=self.role.name
-                )
-        
-        return data_insert
-
