@@ -1,11 +1,10 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, EmailStr
 from .Role import Role
 from infra.entities.users import User
 
 
 class UserAuth(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 class Users(UserAuth):
