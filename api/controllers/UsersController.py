@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from api.mediators.user_mediator import UserMediator, Users, UserAuth
 from api.depends import auth_wrapper
@@ -11,7 +11,12 @@ class UsersController:
 
         @self.router.post('/register')
         async def user_register(user: Users):
-            UserMediator().create_user(user)
+            user_on_db = UserMediator().create_user(user)
+            if user_on_db:
+                return HTTPException(
+                    detail={'Erro': user_on_db},
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
             return JSONResponse(
                 content={'Registro': 'Sucesso'},
                 status_code=status.HTTP_201_CREATED

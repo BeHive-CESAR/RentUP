@@ -24,12 +24,14 @@ class UserMediator:
 
         email -- str que será validado
         '''
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,}$'
         existing_user = self.user_repository.select_by_email(email)
         if existing_user:
-            raise ValueError("Esse email já existe.")
+            return "Esse email já existe."
         if not re.search(regex, email):
-            raise ValueError("Email invalido")
+            return "Email invalido"
+        
+        return False
 
     def __validate_password(self, password:str):
         '''Método responsavel por validar a senha
@@ -39,13 +41,15 @@ class UserMediator:
         password -- str que será validada
         '''
         if len(password) < 8:
-            raise ValueError("A senha deve ter pelo menos 8 caracteres.")
+            return "A senha deve ter pelo menos 8 caracteres."
         if not any(char.isupper() for char in password):
-            raise ValueError("A senha deve ter uma letra maiúscula.")
+            return "A senha deve ter uma letra maiúscula."
         if not any(char.isdigit() for char in password):
-            raise ValueError("A senha deve ter ao menos 1 dígito.")
+            return "A senha deve ter ao menos 1 dígito."
         if not any(char in '!@#$%^&*()_+,' for char in password):
-            raise ValueError("A senha deve ter um caractere especial.")
+            return "A senha deve ter um caractere especial."
+
+        return False
 
     def __validate_name(self, name:str):
         '''Método responsavel por validar o nome
@@ -70,9 +74,15 @@ class UserMediator:
 
         user - objeto do tipo Users que será gravado no banco
         '''
-        self.__validate_email(user.email)
-        self.__validate_password(user.password)
+
+        validate_email = self.__validate_email(user.email)
+        validate_password = self.__validate_password(user.password)
         # self.__validate_name(user.nome)
+
+        if validate_email:
+            return validate_email
+        if validate_password:
+            return validate_password
 
         user_db = User(
             nome=user.nome,
@@ -82,6 +92,8 @@ class UserMediator:
             papel=user.role.name
         )
         self.user_repository.insert(user_db)
+
+        return False
         
 
     def get_users(self):
