@@ -2,14 +2,17 @@ from pydantic import BaseModel
 from typing import Optional
 from infra.entities.itens import Itens
 
-class Item(BaseModel):
-    '''Classe para representar Itens que vêm da API'''
+
+class BaseItem(BaseModel):
     nome: str
-    qntTotal: Optional[int] = 0
-    qntEstoque: Optional[int] = 0
-    qntEmprestar: Optional[int] = 0
-    qntEmprestados: Optional[int] = 0
-    qntDanificados: Optional[int] = 0
+
+class Item(BaseItem):
+    '''Classe para representar Itens que vêm da API'''
+    qntTotal: int = 0
+    qntEstoque: int = 0
+    qntEmprestar: int = 0
+    qntEmprestados: int = 0
+    qntDanificados: int = 0
     descricao: Optional[int] = None
     imagem: Optional[str] = None
 
