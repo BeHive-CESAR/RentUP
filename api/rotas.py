@@ -5,6 +5,6 @@ from .depends import auth_wrapper
 
 router = APIRouter()
 
-router.include_router(Item().router, prefix="/item", dependencies=[Depends(auth_wrapper)])
-router.include_router(User().router, prefix="/user")
+router.include_router(Item().router, prefix="/item", dependencies=[Depends(auth_wrapper)], tags=['Itens'])
+router.include_router(User().router, prefix="/user", tags=['Users'])
 
