@@ -208,6 +208,7 @@ class UsersController:
             email_do_usuario = "usuario@example.com"
             novos_dados = {
                 "password": "nova_senha_segura",
+                "email": "novo_email@example.com",
                 "nome": "Novo Nome",
                 "contato": "+9876543210",
                 "cargo": "User"
