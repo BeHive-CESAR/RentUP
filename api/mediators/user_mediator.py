@@ -27,9 +27,15 @@ class UserMediator:
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,}$'
         existing_user = self.user_repository.select_by_email(email)
         if existing_user:
-            return "Esse email já existe."
+            raise HTTPException(
+                detail="Esse email já existe.",
+                status_code=status.HTTP_409_CONFLICT
+            )
         if not re.search(regex, email):
-            return "Email invalido"
+            raise HTTPException(
+                detail="Email invalido",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
         
         return False
 
@@ -41,15 +47,25 @@ class UserMediator:
         password -- str que será validada
         '''
         if len(password) < 8:
-            return "A senha deve ter pelo menos 8 caracteres."
+            raise HTTPException(
+                detail="A senha deve ter pelo menos 8 caracteres.",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
         if not any(char.isupper() for char in password):
-            return "A senha deve ter uma letra maiúscula."
+            raise HTTPException(
+                detail="A senha deve ter uma letra maiúscula.",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
         if not any(char.isdigit() for char in password):
-            return "A senha deve ter ao menos 1 dígito."
+            raise HTTPException(
+                detail="A senha deve ter ao menos 1 dígito.",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
         if not any(char in '!@#$%^&*()_+,' for char in password):
-            return "A senha deve ter um caractere especial."
-
-        return False
+            raise HTTPException(
+                detail="A senha deve ter um caractere especial.",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
 
     def __validate_name(self, name:str):
         '''Método responsavel por validar o nome
@@ -101,7 +117,7 @@ class UserMediator:
         return self.user_repository.select()
 
     def get_user_by_email(self, email:str):
-        '''Retotnra um usuario especifico a partir do email
+        '''Retorna um usuario especifico a partir do email
         
         Keyword arguments:
 
@@ -110,7 +126,7 @@ class UserMediator:
         return self.user_repository.select_by_email(email)
     
     def get_user_by_name(self, nome:str):
-        '''Retotnra um usuario especifico a partir do nome
+        '''Retorna um usuario especifico a partir do nome
         
         Keyword arguments:
 
