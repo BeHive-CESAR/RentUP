@@ -40,7 +40,17 @@ class ItemMediator:
                 detail="Item já existente",
                 status_code=status.HTTP_400_BAD_REQUEST
             )
-        self.repo.insert(item.to_banco())
+        
+        item_db = Itens(
+            nome_item=item.nome.capitalize(),
+            qnt_total=item.qntTotal,
+            qnt_estoque=item.qntEstoque,
+            qnt_emprestar=item.qntEmprestar,
+            qnt_emprestados=item.qntEmprestados,
+            qnt_danificados=item.qntDanificados,
+            descricao=item.descricao,
+        )
+        self.repo.insert(item_db)
         
     
     def edit_item(self, item1:BaseItem, item2:Item):
@@ -59,8 +69,23 @@ class ItemMediator:
                 detail="Item não encontrado",
                 status_code=status.HTTP_404_NOT_FOUND
             )
+        
+        if self.get_item(item2):
+            raise HTTPException(
+                detail="Item já existente",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
         original_item = Itens(nome_item=item1.nome.capitalize()) 
-        self.repo.update(original_item, item2.to_banco())
+        new_item = Itens(
+            nome_item=item2.nome.capitalize(),
+            qnt_total=item2.qntTotal,
+            qnt_estoque=item2.qntEstoque,
+            qnt_emprestar=item2.qntEmprestar,
+            qnt_emprestados=item2.qntEmprestados,
+            qnt_danificados=item2.qntDanificados,
+            descricao=item2.descricao,
+        )
+        self.repo.update(original_item, new_item)
         
     
     def delete_item(self, item:BaseItem):
@@ -68,13 +93,19 @@ class ItemMediator:
 
         Keyword arguments:
 
-        item -- Objeto do tipo Item que buscado e deletado
+        item -- Objeto do tipo BaseItem que buscado e deletado
         '''
         item_to_delete = self.get_item(item)
+
+        if item_to_delete is None:
+            raise HTTPException(
+                detail="Item não encontrado",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
         
         self.repo.delete(item_to_delete)
     
-    def get_items(self):
+    def get_all_items(self):
         '''Metodo responsavel por buscar todos os Itens no banco de dados'''
         itens = self.repo.select()
         if itens is None:
@@ -89,15 +120,11 @@ class ItemMediator:
 
         Keyword arguments:
 
-        item -- Objeto do tipo Item que será buscado
+        item -- Objeto do tipo BaseItem que será buscado
         '''
         item = Itens(nome_item=item.nome.capitalize())
         item_on_db = self.repo.select_by_item(item)
-        if item_on_db is None:
-            raise HTTPException(
-                detail="Item não encontrado",
-                status_code=status.HTTP_404_NOT_FOUND
-            )
+        
         return item_on_db
     
     
