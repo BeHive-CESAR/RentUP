@@ -48,7 +48,11 @@ tags_metadata = [
     {
         "name": "Root",
         "description": "Endpoints"
-    }
+    },
+    {
+        "name": "Rent",
+        "description": "Operações com empréstimos"
+    },
 ]
 
 app = FastAPI(title='RentUP API',

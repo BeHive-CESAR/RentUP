@@ -23,10 +23,10 @@ class RentRepository:
             except Exception as erro:
                 raise erro
 
-    def select_by_user(self, user:User):
+    def select_by_user(self, email:str):
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Rent).filter(Rent.user_email==user.email).all()
+                data = db.session.query(Rent).filter(Rent.user_email==email).all()
                 return data
             except NoResultFound:
                 return None

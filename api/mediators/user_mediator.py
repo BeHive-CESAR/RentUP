@@ -5,8 +5,8 @@ from decouple import config
 import jwt
 from passlib.context import CryptContext
 from fastapi.exceptions import HTTPException
-from api.entidades.Users import Users, User, UserAuth
-from infra.repository.user_repository import UserRepository
+from api.entidades.Users import Users, UserAuth
+from infra.repository.user_repository import UserRepository, User
 
 
 class UserMediator:

@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr
 from .Role import Role
-from infra.entities.users import User
 
 
 class UserAuth(BaseModel):
