@@ -1,7 +1,7 @@
-from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi import APIRouter, status, Depends
 from fastapi.responses import JSONResponse
 from api.mediators.user_mediator import UserMediator, Users, UserAuth
-from api.depends import auth_wrapper
+from api.depends import auth_admin
 import urllib.parse
 
 
@@ -97,7 +97,7 @@ class UsersController:
             )
         
         @self.router.get('/get-users')
-        async def get_users(token_verify=Depends(auth_wrapper)):
+        async def get_users(token_verify=Depends(auth_admin)):
             """
             ### Lista de Usuários Cadastrados
 
@@ -111,6 +111,8 @@ class UsersController:
             **Códigos de Resposta:**
             - **200 OK**: A solicitação foi bem-sucedida. Retorna uma lista de todos os usuários cadastrados.
             - **404 Not Found**: Não foram encontrados usuários no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
 
             **Exemplo de Uso:**
             ```python
@@ -139,7 +141,7 @@ class UsersController:
             
 
         @self.router.get('/get-user-by-name')
-        async def get_user_by_name(nome:str ,token_verify=Depends(auth_wrapper)):
+        async def get_user_by_name(nome:str ,token_verify=Depends(auth_admin)):
             '''
             ### Consultar Usuário por Nome
 
@@ -153,6 +155,8 @@ class UsersController:
             **Códigos de Resposta:**
             - **200 OK**: A solicitação foi bem-sucedida. Retorna informações do usuário com o nome correspondente.
             - **404 Not Found**: Nenhum usuário com o nome especificado foi encontrado no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
 
             **Exemplo de Uso:**
             ```python
@@ -181,7 +185,7 @@ class UsersController:
             )
 
         @self.router.put('/edit-user')
-        async def edit_user(email:str, user:Users, token_verify=Depends(auth_wrapper)):
+        async def edit_user(email:str, user:Users, token_verify=Depends(auth_admin)):
             '''
             ### Editar Usuário por Email
 
@@ -200,6 +204,8 @@ class UsersController:
             **Códigos de Resposta:**
             - **200 OK**: A edição do usuário foi bem-sucedida. As informações do usuário foram atualizadas com sucesso.
             - **404 Not Found**: Nenhum usuário com o email especificado foi encontrado no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
 
             **Exemplo de Uso:**
             ```python
@@ -227,7 +233,7 @@ class UsersController:
             )
 
         @self.router.delete('/delete-user')
-        async def user_delete(email:str, token_verify=Depends(auth_wrapper)):
+        async def user_delete(email:str, token_verify=Depends(auth_admin)):
             '''
             ### Excluir Usuário por Email
 
@@ -241,6 +247,8 @@ class UsersController:
             **Códigos de Resposta:**
             - **204 No Content**: A exclusão do usuário foi bem-sucedida. O usuário com o email especificado foi removido do sistema.
             - **404 Not Found**: Nenhum usuário com o email especificado foi encontrado no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
 
             **Exemplo de Uso:**
             ```python
