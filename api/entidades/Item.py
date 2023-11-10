@@ -13,5 +13,5 @@ class Item(BaseItem):
     qntEmprestar: int = 0
     qntEmprestados: int = 0
     qntDanificados: int = 0
-    descricao: Optional[int] = None
+    descricao: Optional[str] = None
     imagem: Optional[str] = None
