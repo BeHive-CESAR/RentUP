@@ -59,7 +59,8 @@ app = FastAPI(title='RentUP API',
                     "url": 'https://github.com/garagino'
               },
               openapi_tags=tags_metadata,
-              openapi_url='/rentup.json'
+              openapi_url='/rentup.json',
+              redoc_url=False
               )
 
 with DBConnectionHandler() as db:

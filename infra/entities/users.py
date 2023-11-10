@@ -13,7 +13,7 @@ class User(Base):
     senha = Column(String, nullable=False)
     contato = Column(String, nullable=False)
     papel = Column(String, nullable=False)
-    rent = relationship('Rent', back_populates='user', cascade='all, delete-orphan')
+    rents = relationship('Rent', back_populates='users', cascade='all, delete-orphan')
 
     def __repr__(self):
         '''Metodo mágico que é usado para representar o objeto como uma string que pode ser usada para criar um novo objeto com os mesmos valores.'''
