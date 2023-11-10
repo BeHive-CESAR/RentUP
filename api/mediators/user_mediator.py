@@ -81,8 +81,8 @@ class UserMediator:
         if len(name) > 50:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve ter no máximo 50 caracteres")
         
-        if not re.match(r"^[a-zA-ZÀ-ÖØ-öø-ÿ]+$", name):
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve conter apenas letras")
+        if not re.match(r"^[a-zA-ZÀ-ÿ.\s]+$", name): 
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve conter apenas letras e espaços")
 
     def create_user(self, user:Users):
         '''Método responsavel por, após validações, criar um usuario no banco de dados
