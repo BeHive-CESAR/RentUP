@@ -7,6 +7,7 @@ from passlib.context import CryptContext
 from fastapi.exceptions import HTTPException
 from api.entidades.Users import Users, UserAuth
 from infra.repository.user_repository import UserRepository, User
+from api.entidades.Role import Role
 
 
 class UserMediator:
@@ -219,8 +220,18 @@ class UserMediator:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail='Signature has expired'
             )
-        except jwt.InvalidTokenError as e:
+        except jwt.InvalidTokenError:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail='Invalid Token'
+            )
+    
+    def verify_admin(self, token):
+        '''Metodo responsavel por verificar se o token enviado é válido e se o usuario possui permissão de administrador'''
+        payload = self.verify_token(token)
+        user = self.get_user_by_email(payload)
+        if user.papel != Role.ADMINISTRATOR.name:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Você não possui permissão para acessar esse recurso'
             )
