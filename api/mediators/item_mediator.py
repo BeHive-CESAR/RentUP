@@ -63,6 +63,12 @@ class ItemMediator:
         item2 -- Objeto do tipo Item que deverá possuir os novos dados para substituir o item1 no banco
         '''
         self.__validate_item(item2)
+
+        if item1.nome != item2.nome:
+            raise HTTPException(
+                detail="Nome do item não pode ser alterado",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
         
         if self.get_item(item1) is None:
             raise HTTPException(
@@ -70,11 +76,6 @@ class ItemMediator:
                 status_code=status.HTTP_404_NOT_FOUND
             )
         
-        if self.get_item(item2):
-            raise HTTPException(
-                detail="Item já existente",
-                status_code=status.HTTP_400_BAD_REQUEST
-            )
         original_item = Itens(nome_item=item1.nome.capitalize()) 
         new_item = Itens(
             nome_item=item2.nome.capitalize(),
