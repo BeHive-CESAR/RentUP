@@ -83,6 +83,25 @@ class UserMediator:
         
         if not re.match(r"^[a-zA-ZÀ-ÿ.\s]+$", name): 
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve conter apenas letras e espaços")
+    
+    def __validate_number(self, number:str):
+        '''Método responsavel por validar o numero de telefone
+        
+        Keyword arguments:
+
+        number -- str que será validado 
+        '''
+        if len(number) < 9:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Número de telefone deve ter pelo menos 9 digitos")
+        
+        if len(number) > 11:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Número de telefone deve ter no máximo 11 digitos")
+        
+        if len(number) == 10:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Inclua o DDD no número de telefone")
+        
+        if not re.match(r"^[0-9]+$", number): 
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Número de telefone deve conter apenas números")
 
     def create_user(self, user:Users):
         '''Método responsavel por, após validações, criar um usuario no banco de dados
@@ -96,6 +115,7 @@ class UserMediator:
         self.__validate_email(user.email)
         self.__validate_password(user.password)
         self.__validate_name(user.nome)
+        self.__validate_number(user.contato)
 
         user_db = User(
             nome=user.nome,
