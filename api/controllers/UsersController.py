@@ -105,6 +105,8 @@ class UsersController:
 
             **Endpoint:** `GET /user/get-users`
 
+            **Acesso:** Somente administradores autenticados.
+
             **Parâmetros da Requisição:**
             - Nenhum.
 
@@ -113,12 +115,16 @@ class UsersController:
             - **404 Not Found**: Não foram encontrados usuários no sistema.
             - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
             - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+            
 
             **Exemplo de Uso:**
             ```python
             import requests
 
-            response = requests.get("https://rentup.com/user/get-users")
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.get("https://rentup.com/user/get-users", headers=headers)
             if response.status_code == 200:
                 usuarios = response.json()
                 for usuario in usuarios:
@@ -149,6 +155,8 @@ class UsersController:
 
             **Endpoint:** `GET /user/get-user-by-name?nome={nome}`
 
+            **Acesso:** Somente administradores autenticados.
+
             **Parâmetros da Requisição:**
             - **nome** (string): O nome do usuário que deseja consultar.
 
@@ -164,7 +172,10 @@ class UsersController:
 
             nome_do_usuario = "NomeUsuario"
 
-            response = requests.get(f"https://rentup.com/user/get-user-by-name?nome={nome_do_usuario}")
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.get(f"https://rentup.com/user/get-user-by-name?nome={nome_do_usuario}", headers=headers)
             if response.status_code == 200:
                 usuario = response.json()
                 print(f"Informações do usuário {nome_do_usuario}:{usuario}")
@@ -193,6 +204,8 @@ class UsersController:
 
             **Endpoint:** `PUT /user/edit-user?email={email}`
 
+            **Acesso:** Somente administradores autenticados.
+
             **Parâmetros da Requisição:**
             - **email** (string): O endereço de e-mail do usuário que deseja editar.
             - **email** (string): Novo endereço de e-mail.
@@ -211,6 +224,9 @@ class UsersController:
             ```python
             import requests
 
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
             email_do_usuario = "usuario@example.com"
             novos_dados = {
                 "password": "nova_senha_segura",
@@ -220,7 +236,7 @@ class UsersController:
                 "cargo": "User"
             }
 
-            response = requests.put(f"https://exemplo.com/user/edit-user?email={email_do_usuario}", data=novos_dados)
+            response = requests.put(f"https://exemplo.com/user/edit-user?email={email_do_usuario}", data=novos_dados, headers=headers)
             if response.status_code == 200:
                 print(f"Informações do usuário com o email {email_do_usuario} foram atualizadas com sucesso.")
             else:
@@ -241,6 +257,8 @@ class UsersController:
 
             **Endpoint:** `DELETE /user/delete-user?email={email}`
 
+            **Acesso:** Somente administradores autenticados.
+
             **Parâmetros da Requisição:**
             - **email** (string): O endereço de e-mail do usuário que deseja excluir.
 
@@ -256,7 +274,10 @@ class UsersController:
 
             email_do_usuario = "usuario@example.com"
 
-            response = requests.delete(f"https://rentup.com/user/delete-user?email={email_do_usuario}")
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.delete(f"https://rentup.com/user/delete-user?email={email_do_usuario}", headers=headers)
             if response.status_code == 204:
                 print(f"Usuário com o email {email_do_usuario} foi excluído com sucesso.")
             else:

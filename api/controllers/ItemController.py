@@ -12,6 +12,56 @@ class ItemController:
 
         @self.router.post("/create-item", dependencies=[Depends(auth_admin)])
         async def create_item(item: Item):
+            '''
+            ### Criar Item
+
+            Cria um novo item no estoque.
+
+            **Endpoint:** `POST /item/create-item`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Corpo da Requisição:**
+            - **nome** (string): Nome do novo item.
+            - **qntTotal** (integer): Quantidade total disponível do item.
+            - **qntEstoque** (integer): Quantidade atual em estoque.
+            - **qntEmprestar** (integer): Quantidade disponível para empréstimo.
+            - **qntEmprestados** (integer): Quantidade atualmente emprestada.
+            - **qntDanificados** (integer): Quantidade de itens danificados.
+            - **descricao** (string): Descrição do item.
+            - **imagem** (string): Ainda não implementado, manter None.
+
+            **Códigos de Resposta:**
+            - **201 Created**: O item foi criado com sucesso.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem criar itens.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            dados_item = {
+                "nome": "Novo Item",
+                "qntTotal": 100,
+                "qntEstoque": 100,
+                "qntEmprestar": 80,
+                "qntEmprestados": 20,
+                "qntDanificados": 2,
+                "descricao": "Descrição detalhada do novo item.",
+                "imagem": "None"
+            }
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.post("https://rentup.com/item/create-item", json=dados_item, headers=headers)
+            if response.status_code == 201:
+                print("Novo item criado com sucesso.")
+            else:
+                print("Falha na criação do item. Verifique os dados fornecidos ou suas permissões de administrador.")
+
+            '''
             ItemMediator().create_item(item)
             return JSONResponse(
                 status_code=status.HTTP_201_CREATED,
@@ -20,6 +70,38 @@ class ItemController:
 
         @self.router.get("/get-items")
         async def get_items():
+            '''
+            ### Obter Todos os Itens
+
+            Recupera uma lista de todos os itens disponíveis no estoque.
+
+            **Endpoint:** `GET /item/get-items`
+
+            **Acesso:** Somente usuários autenticados.
+
+            **Parâmetros da Requisição:**
+            - Nenhum.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A solicitação foi bem-sucedida. Retorna uma lista de todos os itens.
+            - **404 Not Found**: Não foram encontrados itens no estoque.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            # Token de autenticação de usuário
+            headers = {"Authorization": "Bearer <token_do_usuario>"}
+
+            response = requests.get("https://rentup.com/item/get-items", headers=headers)
+            if response.status_code == 200:
+                itens = response.json()
+                for item in itens:
+                    print(item)
+            else:
+                print("Nenhum item encontrado no estoque.")
+            '''
             itens_list = ItemMediator().get_all_items()
             item_data = [{
                 'nome_item': item.nome_item,
@@ -36,6 +118,37 @@ class ItemController:
         
         @self.router.get("/get-item-by-name")
         async def get_item(item: str):
+            '''
+            ### Obter Item por Nome
+
+            Recupera informações de um item específico com base no seu nome.
+
+            **Endpoint:** `GET /item/get-item-by-name?nome=<nome_do_item>`
+
+            **Parâmetros da Requisição:**
+            - **nome** (string): O nome do item que deseja consultar.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A solicitação foi bem-sucedida. Retorna informações do item com o nome correspondente.
+            - **404 Not Found**: Nenhum item com o nome especificado foi encontrado no estoque.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            nome_do_item = "NomeDoItem"
+
+            # Token de autenticação de usuário
+            headers = {"Authorization": "Bearer <token_do_usuario>"}
+
+            response = requests.get(f"https://rentup.com/item/get-item-by-name?nome={nome_do_item}", headers=headers)
+            if response.status_code == 200:
+                item = response.json()
+                print(f"Informações do item {nome_do_item}: {item}")
+            else:
+                print(f"Item com o nome {nome_do_item} não encontrado no estoque.")
+            '''
             item = urllib.parse.unquote(item)
             item = ItemMediator().get_item(BaseItem(nome=item))
             if item is None:
@@ -58,6 +171,59 @@ class ItemController:
 
         @self.router.put("/edit-item", dependencies=[Depends(auth_admin)])
         async def edit_item(item1: BaseItem, item2: Item):
+            '''
+            ### Editar Item
+
+            Edita as informações de um item existente no estoque.
+
+            **Endpoint:** `PUT /item/edit-item`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Corpo da Requisição:**
+            - **nome_original** (string): O nome original do item a ser editado.
+            - **nome** (string): Novo nome do item.
+            - **qntTotal** (integer): Nova quantidade total disponível do item.
+            - **qntEstoque** (integer): Nova quantidade atual em estoque.
+            - **qntEmprestar** (integer): Nova quantidade disponível para empréstimo.
+            - **qntEmprestados** (integer): Nova quantidade atualmente emprestada.
+            - **qntDanificados** (integer): Nova quantidade de itens danificados.
+            - **descricao** (string): Nova descrição do item.
+            - **imagem** (string): Ainda não implementado, manter None.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A edição do item foi bem-sucedida. As informações do item foram atualizadas com sucesso.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **400 Bad Request**: O nome do item não pode ser alterado.
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem criar itens.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+            - **404 Not Found**: Nenhum item com o nome original especificado foi encontrado no estoque.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            dados_edicao_item = {
+                "nome_original": "NomeOriginalDoItem",
+                "nome": "Novo Nome do Item",
+                "qntTotal": 150,
+                "qntEstoque": 120,
+                "qntEmprestar": 90,
+                "qntEmprestados": 30,
+                "qntDanificados": 5,
+                "descricao": "Nova descrição detalhada do item.",
+                "imagem": None
+            }
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.put("https://rentup.com/item/edit-item", json=dados_edicao_item, headers=headers)
+            if response.status_code == 200:
+                print(f"Informações do item {dados_edicao_item['nome_original']} foram atualizadas com sucesso.")
+            else:
+                print(f"Nenhum item com o nome original {dados_edicao_item['nome_original']} encontrado para edição.")
+            '''
             ItemMediator().edit_item(item1, item2)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
@@ -66,8 +232,44 @@ class ItemController:
         
         @self.router.delete("/delete-item", dependencies=[Depends(auth_admin)])
         async def delete_item(item: BaseItem):
+            '''
+            ### Excluir Item
+
+            Exclui um item do estoque.
+
+            **Endpoint:** `DELETE /item/delete-item`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Corpo da Requisição:**
+            - **nome** (string): O nome do item a ser excluído.
+
+            **Códigos de Resposta:**
+            - **204 No Content**: A exclusão do item foi bem-sucedida. O item foi removido do estoque.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem criar itens.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+            - **404 Not Found**: Nenhum item com o nome especificado foi encontrado no estoque.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            dados_exclusao_item = {
+                "nome": "NomeDoItemAExcluir"
+            }
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.delete("https://rentup.com/item/delete-item", json=dados_exclusao_item, headers=headers)
+            if response.status_code == 204:
+                print(f"Item {dados_exclusao_item['nome']} excluído com sucesso.")
+            else:
+                print(f"Nenhum item com o nome {dados_exclusao_item['nome']} encontrado para exclusão.")
+
+            '''
             ItemMediator().delete_item(item)
             return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content={"message": "Item deletado com sucesso"}
+                status_code=status.HTTP_204_OK,
             )            
