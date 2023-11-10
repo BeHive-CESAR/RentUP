@@ -9,10 +9,10 @@ class Rent(Base):
     __tablename__ = 'rents'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_email = Column(String, ForeignKey('users.email'), nullable=False,)
-    item_nome = Column(String, ForeignKey('itens.nome_item'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False,)
+    item_id = Column(Integer, ForeignKey('itens.id'), nullable=False)
     data_emprestimo = Column(DateTime, nullable=False)
-    data_devolucao = Column(DateTime, nullable=False)
+    data_devolucao = Column(DateTime, nullable=True)
     estado = Column(String, nullable=False)
     item = relationship('Itens', back_populates='rents')
     users = relationship('User', back_populates='rents')

@@ -150,11 +150,7 @@ class UserMediator:
             self.__validate_name(updated_user.nome)
 
         if original_user.email != updated_user.email:
-            raise HTTPException(
-                detail='Email não pode ser alterado',
-                status_code=status.HTTP_400_BAD_REQUEST
-            )
-            # self.__validate_email(updated_user.email)
+            self.__validate_email(updated_user.email)
         
         self.__validate_password(updated_user.password)
 

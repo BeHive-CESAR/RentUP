@@ -45,10 +45,12 @@ class RentMediator:
         rent -- variavel do tipo Rent que será adicionada ao banco
         '''
         self.__validate_rent(rent)
+        item = self.item_mediator.get_item(BaseItem(nome=rent.itens))
+        user = self.user_mediator.get_user_by_email(rent.user)
 
         rent_db=RentDB(
-            user_email=rent.user,
-            item_nome=rent.itens.capitalize(),
+            user_id=user.id,
+            item_id=item.id,
             data_emprestimo=rent.rentDate,
             data_devolucao=None,
             estado=rent.status.name
