@@ -2,6 +2,7 @@
 
 from infra.configs.base import Base
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 class User(Base):
     '''Classe responsavel por espelhar um user da tabela users no banco de dados'''
@@ -12,6 +13,7 @@ class User(Base):
     senha = Column(String, nullable=False)
     contato = Column(String, nullable=False)
     papel = Column(String, nullable=False)
+    rent = relationship('Rent', back_populates='user', cascade='all, delete-orphan')
 
     def __repr__(self):
         '''Metodo mágico que é usado para representar o objeto como uma string que pode ser usada para criar um novo objeto com os mesmos valores.'''
