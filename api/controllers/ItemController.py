@@ -245,7 +245,7 @@ class ItemController:
             - **nome** (string): O nome do item a ser excluído.
 
             **Códigos de Resposta:**
-            - **204 No Content**: A exclusão do item foi bem-sucedida. O item foi removido do estoque.
+            - **200 OK **: A exclusão do item foi bem-sucedida. O item foi removido do estoque.
             - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
             - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem criar itens.
             - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
@@ -271,5 +271,6 @@ class ItemController:
             '''
             ItemMediator().delete_item(item)
             return JSONResponse(
-                status_code=status.HTTP_204_OK,
+                content={"message": "Item excluído com sucesso"},
+                status_code=status.HTTP_200_OK,
             )            

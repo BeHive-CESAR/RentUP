@@ -263,7 +263,7 @@ class UsersController:
             - **email** (string): O endereço de e-mail do usuário que deseja excluir.
 
             **Códigos de Resposta:**
-            - **204 No Content**: A exclusão do usuário foi bem-sucedida. O usuário com o email especificado foi removido do sistema.
+            - **200 OK**: A exclusão do usuário foi bem-sucedida. O usuário com o email especificado foi removido do sistema.
             - **404 Not Found**: Nenhum usuário com o email especificado foi encontrado no sistema.
             - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
             - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
@@ -286,6 +286,7 @@ class UsersController:
             '''
             UserMediator().delete_user(email)
             return JSONResponse(
-                status_code=status.HTTP_204_NO_CONTENT
+                content={'Exclusão bem sucedida': 'Sucesso'},
+                status_code=status.HTTP_200_OK
             )
         
