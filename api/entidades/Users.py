@@ -6,11 +6,11 @@ class UserAuth(BaseModel):
     email: EmailStr
     password: str
 
-class UserData(UserAuth):
+class UserCreation(UserAuth):
     nome: str 
     contato: str
 
-class Users(UserData):
+class Users(UserCreation):
     '''Classe para representar Users que vêm da API'''
     role: Role = Role.USER
 

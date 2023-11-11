@@ -3,6 +3,7 @@
 from infra.entities.users import User
 from infra.configs.connection import DBConnectionHandler
 from sqlalchemy.orm.exc import NoResultFound
+from api.entidades.Role import Role
 
 class UserRepository:
     '''Essa class é responsavel por conter os metodos que vamos precisar pro CRUD'''
@@ -90,4 +91,15 @@ class UserRepository:
             except NoResultFound:
                 return None
             except Exception as erro:
-                raise erro       
+                raise erro  
+
+    def update_role(self, user:User, role:Role):
+        with DBConnectionHandler() as db:
+            try:
+                db.session.query(User).filter(User.email==user.email).update({
+                    'papel': role
+                })
+                db.session.commit()
+            except Exception as erro:
+                db.session.rollback()
+                raise erro

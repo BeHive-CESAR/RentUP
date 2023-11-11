@@ -6,7 +6,7 @@ import jwt
 from passlib.context import CryptContext
 from sqlalchemy.exc import ProgrammingError
 from fastapi.exceptions import HTTPException
-from api.entidades.Users import Users, UserAuth
+from api.entidades.Users import Users, UserAuth, UserCreation
 from infra.repository.user_repository import UserRepository, User
 from api.entidades.Role import Role
 
@@ -104,7 +104,7 @@ class UserMediator:
         if not re.match(r"^[0-9]+$", number): 
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Número de telefone deve conter apenas números")
 
-    def create_user(self, user:Users):
+    def create_user(self, user:UserCreation):
         '''Método responsavel por, após validações, criar um usuario no banco de dados
         com senha criptografada
         
@@ -123,7 +123,7 @@ class UserMediator:
             email=user.email,
             senha=self.crypt_context.hash(user.password),
             contato=user.contato,
-            papel=user.role.name
+            papel=Role.USER.name
         )
         self.user_repository.insert(user_db)
         
@@ -184,6 +184,25 @@ class UserMediator:
         )
 
         self.user_repository.update(original_user, novo_user)
+    
+    def edit_user_role(self, email:str, role:Role):
+        '''Realiza a validação do email e verifica se o mesmo existe no banco. Caso esteja tudo OK acessa o usuario e edita-o. Caso não retorna uma mensagem de erro
+
+        Keyword arguments:
+
+        email -- email que será buscado e editado
+        
+        role -- Objeto do tipo Role que deverá possuir o novo cargo para substituir no usuario
+        '''
+        user = self.get_user_by_email(email)
+
+        if user is None:
+            raise HTTPException(
+                detail='Usuário não encontrado',
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+
+        self.user_repository.update_role(user, role)
 
     def delete_user(self, email:str):
         '''Metodo responsavel por deletar um user do banco de dados

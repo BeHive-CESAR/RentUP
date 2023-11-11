@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Depends
 from fastapi.responses import JSONResponse
-from api.mediators.user_mediator import UserMediator, Users, UserAuth
+from api.mediators.user_mediator import UserMediator, Users, UserAuth, UserCreation, Role
 from api.depends import auth_admin
 import urllib.parse
 
@@ -10,7 +10,7 @@ class UsersController:
         self.router = APIRouter()
 
         @self.router.post('/register')
-        async def user_register(user: Users):
+        async def user_register(user: UserCreation):
             '''
             ### Endpoint de Registro de Usuário
 
@@ -289,4 +289,50 @@ class UsersController:
                 content={'Exclusão bem sucedida': 'Sucesso'},
                 status_code=status.HTTP_200_OK
             )
+
+        @self.router.put('/edit-role')
+        async def edit_role(email:str, role:Role, token_verify=Depends(auth_admin)):
+            '''
+            ### Editar Papel do Usuário
+
+            Edita o papel (Role) de um usuário no sistema.
+
+            **Endpoint:** `PUT /user/edit-role?email={email}&role={role}`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Parâmetros da Requisição:**
+            - **email** (string): O endereço de e-mail do usuário que terá seu papel editado.
+            - **role** (string): A nova Role que será atribuída ao usuário. Deve ser uma das seguintes opções: "ADMINISTRATOR" ou "USER".
+
+            **Códigos de Resposta:**
+            - **200 OK**: A edição do papel do usuário foi bem-sucedida. O papel do usuário foi atualizado com sucesso.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem editar o papel dos usuários.
+            - **403 Forbidden**: Acesso proibido. O usuário não possui privilégios de administrador.
+            - **404 Not Found**: Nenhum usuário com o e-mail especificado foi encontrado no sistema.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            email_do_usuario = "usuario@example.com"
+            nova_role = "ADMINISTRATOR"
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.put(f"https://rentup.com/user/edit-role?email={email_do_usuario}&role={nova_role}", headers=headers)
+            if response.status_code == 200:
+                print(f"Papel do usuário com o e-mail {email_do_usuario} atualizado para {nova_role} com sucesso.")
+            else:
+                print(f"Nenhum usuário com o e-mail {email_do_usuario} encontrado para edição de papel.")
+            '''
+
+            UserMediator().edit_user_role(email, role)
+            return JSONResponse(
+                content={'Edição bem sucedida': 'Sucesso'},
+                status_code=status.HTTP_200_OK
+            )
+
         
