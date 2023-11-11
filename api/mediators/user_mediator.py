@@ -4,7 +4,7 @@ from fastapi import status
 from decouple import config
 import jwt
 from passlib.context import CryptContext
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import ProgrammingError
 from fastapi.exceptions import HTTPException
 from api.entidades.Users import Users, UserAuth
 from infra.repository.user_repository import UserRepository, User
@@ -201,7 +201,7 @@ class UserMediator:
         
         try:
             self.user_repository.delete(user_to_delete)
-        except IntegrityError:
+        except ProgrammingError:
             raise HTTPException(
                 detail='Não foi possível deletar o usuário pois ele possui itens emprestados',
                 status_code=status.HTTP_409_CONFLICT
