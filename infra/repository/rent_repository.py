@@ -36,7 +36,7 @@ class RentRepository:
                 raise erro
 
     def select_by_item(self, item:Itens):
-        item = ItensRepository().select_by_name(item.nome_item)
+        item = ItensRepository().select_by_item(item)
 
         with DBConnectionHandler() as db:
             try:
