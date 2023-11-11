@@ -37,18 +37,17 @@ A **RentUP API** é uma ferramenta poderosa para facilitar o controle de recurso
 tags_metadata = [
     {
         "name": "Users",
-        "description": "Operações com usuarios. A lógica de **login** está aqui"
+        "description": "Operações com usuarios."
         
     },
     {
         "name": "Itens",
-        "description": "Manage items. So _fancy_ they have their own docs.",
         "description": "Gerenciamento de Itens no estoque.",
     },
     {
-        "name": "Root",
-        "description": "Endpoints"
-    }
+        "name": "Rent",
+        "description": "Operações com empréstimos"
+    },
 ]
 
 app = FastAPI(title='RentUP API',
@@ -60,13 +59,14 @@ app = FastAPI(title='RentUP API',
                     "url": 'https://github.com/garagino'
               },
               openapi_tags=tags_metadata,
-              openapi_url='/rentup.json'
+              openapi_url='/rentup.json',
+              redoc_url=False
               )
 
 with DBConnectionHandler() as db:
     db.create_all_tables()
 
-@app.get('/', tags=['Root'])
+@app.get('/', tags=['Root'], include_in_schema=False)
 async def root():
     return {"Bem vindo ao RentUP": "conectado"}
 

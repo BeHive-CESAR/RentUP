@@ -1,8 +1,9 @@
-
-from infra.entities.users import User
 from infra.entities.itens import Itens
 from infra.entities.rent import Rent
 from infra.configs.connection import DBConnectionHandler
+from infra.repository.user_repository import UserRepository
+from infra.repository.itens_repository import ItensRepository
+from api.entidades.Status import Status
 from sqlalchemy.orm.exc import NoResultFound
 
 class RentRepository:
@@ -23,10 +24,12 @@ class RentRepository:
             except Exception as erro:
                 raise erro
 
-    def select_by_user(self, user:User):
+    def select_by_user(self, email:str):
+        user = UserRepository().select_by_email(email)
+
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Rent).filter(Rent.user_email==user.email).all()
+                data = db.session.query(Rent).filter(Rent.user_id==user.id).all()
                 return data
             except NoResultFound:
                 return None
@@ -34,9 +37,11 @@ class RentRepository:
                 raise erro
 
     def select_by_item(self, item:Itens):
+        item = ItensRepository().select_by_item(item)
+
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Rent).filter(Rent.item_nome==item.nome_item).all()
+                data = db.session.query(Rent).filter(Rent.item_id==item.id).all()
                 return data
             except NoResultFound:
                 return None
@@ -46,7 +51,7 @@ class RentRepository:
     def select_by_rent(self, rent:Rent):
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Rent).filter(Rent.item_nome==rent.item_nome, Rent.user_email==rent.user_email,
+                data = db.session.query(Rent).filter(Rent.item_id==rent.item_id, Rent.user_id==rent.user_id,
                                                      Rent.data_emprestimo==rent.data_emprestimo,Rent.data_devolucao==rent.data_devolucao,
                                                      Rent.estado==rent.estado).one()
                 return data
@@ -59,14 +64,24 @@ class RentRepository:
         with DBConnectionHandler() as db:
             try:
                 db.session.query(Rent).filter(Rent.id==rent.id).update({
-                    'id':rent2.id,
-                    'user_email':rent2.user_email,
-                    'item_nome':rent2.item_nome,
+                    'user_id':rent2.user_id,
+                    'item_id':rent2.item_id,
                     'data_emprestimo':rent2.data_emprestimo,
                     'data_devolucao':rent2.data_devolucao,
                     'estado':rent2.estado
                 })
       
+            except Exception as erro:
+                db.session.rollback()
+                raise erro
+    
+    def update_status(self, rent:Rent, status:Status):
+        with DBConnectionHandler() as db:
+            try:
+                db.session.query(Rent).filter(Rent.id==rent.id).update({
+                    'estado':status
+                })
+                db.session.commit()
             except Exception as erro:
                 db.session.rollback()
                 raise erro

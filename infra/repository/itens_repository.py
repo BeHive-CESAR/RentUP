@@ -3,7 +3,6 @@
 from infra.configs.connection import DBConnectionHandler
 from infra.entities.itens import Itens
 from sqlalchemy.orm.exc import NoResultFound
-import pandas as pd
 
 class ItensRepository:
     '''Essa class é responsavel por conter os metodos que vamos precisar pro CRUD'''
@@ -87,7 +86,7 @@ class ItensRepository:
                 db.session.rollback()
                 raise erro
     
-    def update_rent(self, item:Itens):
+    def update_rent(self, item:str):
         '''Metodo resonsavel por decrementar em 1 o atributo qnt_estoque e incrementar em 1 o qnt_emprestados de um Itens no banco de dados
 
         Keyword arguments:
@@ -96,10 +95,10 @@ class ItensRepository:
         '''
         with DBConnectionHandler() as db:
             try:
-                data = self.select_by_item(item)
-                db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).update(
+                data = self.select_by_item(Itens(nome_item=item))
+                db.session.query(Itens).filter(Itens.nome_item==item).update(
                     {
-                        'qnt_estoque':data.qnt_estoque-1,
+                        'qnt_emprestar':data.qnt_emprestar-1,
                         'qnt_emprestados':data.qnt_emprestados+1
                     }
                 )
@@ -120,47 +119,11 @@ class ItensRepository:
                 data = self.select_by_item(item)
                 db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).update(
                     {
-                        'qnt_estoque':data.qnt_estoque+1,
+                        'qnt_emprestar':data.qnt_emprestar+1,
                         'qnt_emprestados':data.qnt_emprestados-1
                     }
                 )
                 db.session.commit()
             except Exception as erro:
                 db.session.rollback()
-                raise erro
-    
-    def insert_excel(self, excel:str):
-        '''(DEPRECATED)Metodo responsavel por inserir no banco uma planiha excel, atualizando os valores dos itens ja existentes e adicionando os novos itens
-
-        Keyword arguments:
-
-        excel -- caminho para o arquivo da planilha
-        '''
-        try:
-            data_excel = pd.read_excel(excel)
-            data_excel = data_excel.iloc
-
-            for data in data_excel:
-                data = data.to_list()
-                if self.select_by_item(data[0]):
-                    self.update(data[0], int(data[1]), int(data[2]), int(data[3]), int(data[4]))
-                else:
-                    self.insert(data[0], int(data[1]), int(data[2]), int(data[3]), int(data[4]))
-        except Exception as erro:
-            raise erro
-    
-    def export_excel(self, excel_path:str='itens_bd.xlsx'):
-        '''(DEPRECATED)Metodo responsavel por exportar do banco uma planiha excel
-
-        Keyword arguments:
-
-        excel_path -- caminho onde deseja salvar a planilha (defalt itens_bd.xlsx)
-        '''
-        with DBConnectionHandler() as db:
-            try:
-                sql_consult = 'SELECT * FROM itens'
-                data = pd.read_sql_query(sql_consult, db.get_engine())
-                data.to_excel(excel_path, index=False)
-            except Exception as erro:
-                raise erro
-        
+                raise erro        

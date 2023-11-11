@@ -1,33 +1,42 @@
-from api.entidades.Rent import Rent
-from infra.repository.rent_repository import RentRepository
-from infra.repository.itens_repository import ItensRepository, Itens
-from api.entidades.Users import User
-from .item_mediator import ItemMediator, Item
+from fastapi import status
 from datetime import datetime
+from fastapi.exceptions import HTTPException
+from api.entidades.Rent import Rent, ReturnRent
+from infra.entities.rent import Rent as RentDB
+from api.mediators.user_mediator import UserMediator
+from infra.repository.rent_repository import RentRepository
+from .item_mediator import ItemMediator, Item, BaseItem, ItensRepository
+from api.entidades.Status import Status
 
 class RentMediator:
     def __init__(self):
         self.repo=RentRepository()
-        self.repoItens=ItensRepository()
-        self.medItens=ItemMediator()
+        self.user_mediator=UserMediator()
+        self.item_mediator=ItemMediator()
+        self.item_repo=ItensRepository()
 
-    def __validate(self, rent:Rent):
+    def __validate_rent(self, rent:Rent):
         ''' Metodo reponsável por validar se o Rent pode ser realizado
 
         Keywords arguments:
 
         rent -- variavel do tipo Rent que será validada
         '''
-        item=Item(nome=rent.itens)
-        item_atual=self.medItens.get_item(item)
+        item=BaseItem(nome=rent.itens)
+        item_atual=self.item_mediator.get_item(item)
         
-        if item_atual!=None:
-            if item_atual.qnt_emprestar>0:
-                return item_atual
-            else:
-                return "Item indisponível para empréstimo."
-        else:
-            return "Item inexistente."
+        if item_atual is None:
+            raise HTTPException(
+                detail="Item inexistente",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if item_atual.qnt_emprestar==0:
+            raise HTTPException(
+                detail="Item indisponível para empréstimo",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+            
     
     def rentup_item(self, rent:Rent):
         ''' Metodo reponsável por criar um novo emprestimo no banco de dados
@@ -36,38 +45,109 @@ class RentMediator:
 
         rent -- variavel do tipo Rent que será adicionada ao banco
         '''
-        item=self.__validate(rent)
-        
-        if type(item)==Itens:
-            self.repo.insert(rent.to_banco())
-            self.repoItens.update_rent(item)
-        else:
-            return item
+        self.__validate_rent(rent)
+        item = self.item_mediator.get_item(BaseItem(nome=rent.itens))
+        user = self.user_mediator.get_user_by_email(rent.user)
 
-    def return_item(self, rent:Rent):
+        if user is None:
+            raise HTTPException(
+                detail="Usuário inexistente",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        rent_db=RentDB(
+            user_id=user.id,
+            item_id=item.id,
+            data_emprestimo=rent.rentDate,
+            data_devolucao=None,
+            estado=rent.status.name
+        )
+        
+        
+        self.repo.insert(rent_db)
+        self.item_repo.update_rent(rent.itens)
+        
+
+    def return_item(self, rent:ReturnRent):
         ''' Metodo reponsável por retornar um emprestimo a coluna de emprestar e adiciona a data de devolução
 
         Keywords arguments:
 
         rent -- variavel do tipo Rent que será retornada
         '''
+
+
         item=Item(nome=rent.itens)
-        item_atual=self.medItens.get_item(item)
+        item_atual=self.item_mediator.get_item(item)
 
-        rent2=rent
-        rent2.returnDate=datetime.now()
+        if item_atual is None:
+            raise HTTPException(
+                detail="Item inexistente",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        elif item_atual.qnt_emprestados==0:
+            raise HTTPException(
+                detail="Item não emprestado",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
 
-        self.repo.update(rent, rent2)
+        rent_update=rent
+        rent_update.returnDate=datetime.now()
+
+        self.repo.update(rent, rent_update)
         self.repoItens.update_return(item_atual)
 
     def get_history(self):
         '''Retorna o historico de empréstimos'''
         return self.repo.select()
 
-    def get_history_by_item(self, item:Item):
+    def get_history_by_item(self, item:BaseItem):
         '''Retorna o historico de empréstimos por item'''
-        return self.repo.select_by_item(item)
+        item_on_db=self.item_mediator.get_item(item)
 
-    def get_history_by_user(self, user:User):
+        if item_on_db is None:
+            raise HTTPException(
+                detail="Item inexistente",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
+        itens = self.repo.select_by_item(item)
+        if itens is None:
+            raise HTTPException(
+                detail="Nenhum emprestimo encontrado para este item",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
+        return itens
+
+    def get_history_by_user(self, user_email:str):
         '''Retorna o historico de empréstimos por usuario'''
-        return self.repo.select_by_user(user)
+        user = self.user_mediator.get_user(user_email)
+
+        if user is None:
+            raise HTTPException(
+                detail="Usuário inexistente",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+        
+        rent_list = self.repo.select_by_user(user)
+
+        if rent_list is None:
+            raise HTTPException(
+                detail="Nenhum empréstimo encontrado para este usuário",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
+        return rent_list
+    
+    def update_status(self, rent:Rent, stat:Status):
+        '''Atualiza o status do emprestimo'''
+        rent_db = self.repo.select_by_rent(rent)
+
+        if rent_db is None:
+            raise HTTPException(
+                detail="Emprestimo não encontrado",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+
+        self.repo.update_status(rent_db, stat)

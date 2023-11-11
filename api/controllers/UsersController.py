@@ -1,7 +1,7 @@
-from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi import APIRouter, status, Depends
 from fastapi.responses import JSONResponse
-from api.mediators.user_mediator import UserMediator, Users, UserAuth
-from api.depends import auth_wrapper
+from api.mediators.user_mediator import UserMediator, Users, UserAuth, UserCreation, Role
+from api.depends import auth_admin
 import urllib.parse
 
 
@@ -10,7 +10,7 @@ class UsersController:
         self.router = APIRouter()
 
         @self.router.post('/register')
-        async def user_register(user: Users):
+        async def user_register(user: UserCreation):
             '''
             ### Endpoint de Registro de Usuário
 
@@ -97,7 +97,7 @@ class UsersController:
             )
         
         @self.router.get('/get-users')
-        async def get_users(token_verify=Depends(auth_wrapper)):
+        async def get_users(token_verify=Depends(auth_admin)):
             """
             ### Lista de Usuários Cadastrados
 
@@ -105,18 +105,26 @@ class UsersController:
 
             **Endpoint:** `GET /user/get-users`
 
+            **Acesso:** Somente administradores autenticados.
+
             **Parâmetros da Requisição:**
             - Nenhum.
 
             **Códigos de Resposta:**
             - **200 OK**: A solicitação foi bem-sucedida. Retorna uma lista de todos os usuários cadastrados.
             - **404 Not Found**: Não foram encontrados usuários no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+            
 
             **Exemplo de Uso:**
             ```python
             import requests
 
-            response = requests.get("https://rentup.com/user/get-users")
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.get("https://rentup.com/user/get-users", headers=headers)
             if response.status_code == 200:
                 usuarios = response.json()
                 for usuario in usuarios:
@@ -139,7 +147,7 @@ class UsersController:
             
 
         @self.router.get('/get-user-by-name')
-        async def get_user_by_name(nome:str ,token_verify=Depends(auth_wrapper)):
+        async def get_user_by_name(nome:str ,token_verify=Depends(auth_admin)):
             '''
             ### Consultar Usuário por Nome
 
@@ -147,12 +155,16 @@ class UsersController:
 
             **Endpoint:** `GET /user/get-user-by-name?nome={nome}`
 
+            **Acesso:** Somente administradores autenticados.
+
             **Parâmetros da Requisição:**
             - **nome** (string): O nome do usuário que deseja consultar.
 
             **Códigos de Resposta:**
             - **200 OK**: A solicitação foi bem-sucedida. Retorna informações do usuário com o nome correspondente.
             - **404 Not Found**: Nenhum usuário com o nome especificado foi encontrado no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
 
             **Exemplo de Uso:**
             ```python
@@ -160,7 +172,10 @@ class UsersController:
 
             nome_do_usuario = "NomeUsuario"
 
-            response = requests.get(f"https://rentup.com/user/get-user-by-name?nome={nome_do_usuario}")
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.get(f"https://rentup.com/user/get-user-by-name?nome={nome_do_usuario}", headers=headers)
             if response.status_code == 200:
                 usuario = response.json()
                 print(f"Informações do usuário {nome_do_usuario}:{usuario}")
@@ -181,13 +196,15 @@ class UsersController:
             )
 
         @self.router.put('/edit-user')
-        async def edit_user(email:str, user:Users, token_verify=Depends(auth_wrapper)):
+        async def edit_user(email:str, user:Users, token_verify=Depends(auth_admin)):
             '''
             ### Editar Usuário por Email
 
             Edita as informações de um usuário com base no seu endereço de e-mail.
 
             **Endpoint:** `PUT /user/edit-user?email={email}`
+
+            **Acesso:** Somente administradores autenticados.
 
             **Parâmetros da Requisição:**
             - **email** (string): O endereço de e-mail do usuário que deseja editar.
@@ -200,20 +217,26 @@ class UsersController:
             **Códigos de Resposta:**
             - **200 OK**: A edição do usuário foi bem-sucedida. As informações do usuário foram atualizadas com sucesso.
             - **404 Not Found**: Nenhum usuário com o email especificado foi encontrado no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
 
             **Exemplo de Uso:**
             ```python
             import requests
 
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
             email_do_usuario = "usuario@example.com"
             novos_dados = {
                 "password": "nova_senha_segura",
+                "email": "novo_email@example.com",
                 "nome": "Novo Nome",
                 "contato": "+9876543210",
                 "cargo": "User"
             }
 
-            response = requests.put(f"https://exemplo.com/user/edit-user?email={email_do_usuario}", data=novos_dados)
+            response = requests.put(f"https://exemplo.com/user/edit-user?email={email_do_usuario}", data=novos_dados, headers=headers)
             if response.status_code == 200:
                 print(f"Informações do usuário com o email {email_do_usuario} foram atualizadas com sucesso.")
             else:
@@ -226,7 +249,7 @@ class UsersController:
             )
 
         @self.router.delete('/delete-user')
-        async def user_delete(email:str, token_verify=Depends(auth_wrapper)):
+        async def user_delete(email:str, token_verify=Depends(auth_admin)):
             '''
             ### Excluir Usuário por Email
 
@@ -234,12 +257,16 @@ class UsersController:
 
             **Endpoint:** `DELETE /user/delete-user?email={email}`
 
+            **Acesso:** Somente administradores autenticados.
+
             **Parâmetros da Requisição:**
             - **email** (string): O endereço de e-mail do usuário que deseja excluir.
 
             **Códigos de Resposta:**
-            - **204 No Content**: A exclusão do usuário foi bem-sucedida. O usuário com o email especificado foi removido do sistema.
+            - **200 OK**: A exclusão do usuário foi bem-sucedida. O usuário com o email especificado foi removido do sistema.
             - **404 Not Found**: Nenhum usuário com o email especificado foi encontrado no sistema.
+            - **401 Unauthorized**: Acesso negado. O usuário não tem permissão para acessar este recurso.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
 
             **Exemplo de Uso:**
             ```python
@@ -247,7 +274,10 @@ class UsersController:
 
             email_do_usuario = "usuario@example.com"
 
-            response = requests.delete(f"https://rentup.com/user/delete-user?email={email_do_usuario}")
+            # Token de autenticação de usuário administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.delete(f"https://rentup.com/user/delete-user?email={email_do_usuario}", headers=headers)
             if response.status_code == 204:
                 print(f"Usuário com o email {email_do_usuario} foi excluído com sucesso.")
             else:
@@ -256,6 +286,53 @@ class UsersController:
             '''
             UserMediator().delete_user(email)
             return JSONResponse(
-                content={'Usuário deletado com sucesso'},
-                status_code=status.HTTP_204_NO_CONTENT
+                content={'Exclusão bem sucedida': 'Sucesso'},
+                status_code=status.HTTP_200_OK
             )
+
+        @self.router.put('/edit-role')
+        async def edit_role(email:str, role:Role, token_verify=Depends(auth_admin)):
+            '''
+            ### Editar Papel do Usuário
+
+            Edita o papel (Role) de um usuário no sistema.
+
+            **Endpoint:** `PUT /user/edit-role?email={email}&role={role}`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Parâmetros da Requisição:**
+            - **email** (string): O endereço de e-mail do usuário que terá seu papel editado.
+            - **role** (string): A nova Role que será atribuída ao usuário. Deve ser uma das seguintes opções: "ADMINISTRATOR" ou "USER".
+
+            **Códigos de Resposta:**
+            - **200 OK**: A edição do papel do usuário foi bem-sucedida. O papel do usuário foi atualizado com sucesso.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem editar o papel dos usuários.
+            - **403 Forbidden**: Acesso proibido. O usuário não possui privilégios de administrador.
+            - **404 Not Found**: Nenhum usuário com o e-mail especificado foi encontrado no sistema.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            email_do_usuario = "usuario@example.com"
+            nova_role = "ADMINISTRATOR"
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.put(f"https://rentup.com/user/edit-role?email={email_do_usuario}&role={nova_role}", headers=headers)
+            if response.status_code == 200:
+                print(f"Papel do usuário com o e-mail {email_do_usuario} atualizado para {nova_role} com sucesso.")
+            else:
+                print(f"Nenhum usuário com o e-mail {email_do_usuario} encontrado para edição de papel.")
+            '''
+
+            UserMediator().edit_user_role(email, role)
+            return JSONResponse(
+                content={'Edição bem sucedida': 'Sucesso'},
+                status_code=status.HTTP_200_OK
+            )
+
+        

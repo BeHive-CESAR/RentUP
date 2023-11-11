@@ -4,9 +4,11 @@ from fastapi import status
 from decouple import config
 import jwt
 from passlib.context import CryptContext
+from sqlalchemy.exc import ProgrammingError
 from fastapi.exceptions import HTTPException
-from api.entidades.Users import Users, User, UserAuth
-from infra.repository.user_repository import UserRepository
+from api.entidades.Users import Users, UserAuth, UserCreation
+from infra.repository.user_repository import UserRepository, User
+from api.entidades.Role import Role
 
 
 class UserMediator:
@@ -80,10 +82,29 @@ class UserMediator:
         if len(name) > 50:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve ter no máximo 50 caracteres")
         
-        if not re.match(r"^[a-zA-ZÀ-ÖØ-öø-ÿ]+$", name):
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve conter apenas letras")
+        if not re.match(r"^[a-zA-ZÀ-ÿ.\s]+$", name): 
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve conter apenas letras e espaços")
+    
+    def __validate_number(self, number:str):
+        '''Método responsavel por validar o numero de telefone
+        
+        Keyword arguments:
 
-    def create_user(self, user:Users):
+        number -- str que será validado 
+        '''
+        if len(number) < 9:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Número de telefone deve ter pelo menos 9 digitos")
+        
+        if len(number) > 11:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Número de telefone deve ter no máximo 11 digitos")
+        
+        if len(number) == 10:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Inclua o DDD no número de telefone")
+        
+        if not re.match(r"^[0-9]+$", number): 
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Número de telefone deve conter apenas números")
+
+    def create_user(self, user:UserCreation):
         '''Método responsavel por, após validações, criar um usuario no banco de dados
         com senha criptografada
         
@@ -95,13 +116,14 @@ class UserMediator:
         self.__validate_email(user.email)
         self.__validate_password(user.password)
         self.__validate_name(user.nome)
+        self.__validate_number(user.contato)
 
         user_db = User(
             nome=user.nome,
             email=user.email,
             senha=self.crypt_context.hash(user.password),
             contato=user.contato,
-            papel=user.role.name
+            papel=Role.USER.name
         )
         self.user_repository.insert(user_db)
         
@@ -162,6 +184,25 @@ class UserMediator:
         )
 
         self.user_repository.update(original_user, novo_user)
+    
+    def edit_user_role(self, email:str, role:Role):
+        '''Realiza a validação do email e verifica se o mesmo existe no banco. Caso esteja tudo OK acessa o usuario e edita-o. Caso não retorna uma mensagem de erro
+
+        Keyword arguments:
+
+        email -- email que será buscado e editado
+        
+        role -- Objeto do tipo Role que deverá possuir o novo cargo para substituir no usuario
+        '''
+        user = self.get_user_by_email(email)
+
+        if user is None:
+            raise HTTPException(
+                detail='Usuário não encontrado',
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+
+        self.user_repository.update_role(user, role)
 
     def delete_user(self, email:str):
         '''Metodo responsavel por deletar um user do banco de dados
@@ -176,7 +217,14 @@ class UserMediator:
                 detail='Usuário não encontrado',
                 status_code=status.HTTP_404_NOT_FOUND
             )
-        self.user_repository.delete(user_to_delete)
+        
+        try:
+            self.user_repository.delete(user_to_delete)
+        except ProgrammingError:
+            raise HTTPException(
+                detail='Não foi possível deletar o usuário pois ele possui itens emprestados',
+                status_code=status.HTTP_409_CONFLICT
+            )
 
     def user_login(self, user:UserAuth, expires_in:int=5):
         '''Metodo responsavel por fazer a autenticação do usuario e retornar um token de acesso e os dados do usuario logado
@@ -219,8 +267,18 @@ class UserMediator:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail='Signature has expired'
             )
-        except jwt.InvalidTokenError as e:
+        except jwt.InvalidTokenError:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail='Invalid Token'
+            )
+    
+    def verify_admin(self, token):
+        '''Metodo responsavel por verificar se o token enviado é válido e se o usuario possui permissão de administrador'''
+        payload = self.verify_token(token)
+        user = self.get_user_by_email(payload)
+        if user.papel != Role.ADMINISTRATOR.name:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Você não possui permissão para acessar esse recurso'
             )
