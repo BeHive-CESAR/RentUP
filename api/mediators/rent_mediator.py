@@ -48,6 +48,12 @@ class RentMediator:
         item = self.item_mediator.get_item(BaseItem(nome=rent.itens))
         user = self.user_mediator.get_user_by_email(rent.user)
 
+        if user is None:
+            raise HTTPException(
+                detail="Usuário inexistente",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
         rent_db=RentDB(
             user_id=user.id,
             item_id=item.id,
