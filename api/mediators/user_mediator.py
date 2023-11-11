@@ -4,6 +4,7 @@ from fastapi import status
 from decouple import config
 import jwt
 from passlib.context import CryptContext
+from sqlalchemy.exc import IntegrityError
 from fastapi.exceptions import HTTPException
 from api.entidades.Users import Users, UserAuth
 from infra.repository.user_repository import UserRepository, User
@@ -197,7 +198,14 @@ class UserMediator:
                 detail='Usuário não encontrado',
                 status_code=status.HTTP_404_NOT_FOUND
             )
-        self.user_repository.delete(user_to_delete)
+        
+        try:
+            self.user_repository.delete(user_to_delete)
+        except IntegrityError:
+            raise HTTPException(
+                detail='Não foi possível deletar o usuário pois ele possui itens emprestados',
+                status_code=status.HTTP_409_CONFLICT
+            )
 
     def user_login(self, user:UserAuth, expires_in:int=5):
         '''Metodo responsavel por fazer a autenticação do usuario e retornar um token de acesso e os dados do usuario logado

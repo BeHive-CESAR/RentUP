@@ -1,4 +1,5 @@
 from fastapi import status
+from sqlalchemy.exc import IntegrityError
 from fastapi.exceptions import HTTPException
 from api.entidades.Item import Item, BaseItem
 from infra.repository.itens_repository import ItensRepository, Itens
@@ -98,7 +99,13 @@ class ItemMediator:
                 status_code=status.HTTP_404_NOT_FOUND
             )
         
-        self.repo.delete(item_to_delete)
+        try:
+            self.repo.delete(item_to_delete)
+        except IntegrityError:
+            raise HTTPException(
+                detail="Item não pode ser deletado pois está sendo usado em um emprestimo",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
     
     def get_all_items(self):
         '''Metodo responsavel por buscar todos os Itens no banco de dados'''
