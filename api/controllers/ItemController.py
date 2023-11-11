@@ -28,8 +28,8 @@ class ItemController:
             - **qntEmprestar** (integer): Quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Quantidade atualmente emprestada.
             - **qntDanificados** (integer): Quantidade de itens danificados.
-            - **descricao** (string): Descrição do item.
-            - **imagem** (string): Ainda não implementado, manter None.
+            - **descricao** (string, opcional): Descrição do item.
+            - **imagem** (string, opcional): URL da imagem representativa do item.
 
             **Códigos de Resposta:**
             - **201 Created**: O item foi criado com sucesso.
@@ -49,7 +49,7 @@ class ItemController:
                 "qntEmprestados": 20,
                 "qntDanificados": 2,
                 "descricao": "Descrição detalhada do novo item.",
-                "imagem": "None"
+                "imagem": "https://exemplo.com/imagem/novo_item.jpg"
             }
 
             # Token de autenticação de administrador
@@ -188,8 +188,8 @@ class ItemController:
             - **qntEmprestar** (integer): Nova quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Nova quantidade atualmente emprestada.
             - **qntDanificados** (integer): Nova quantidade de itens danificados.
-            - **descricao** (string): Nova descrição do item.
-            - **imagem** (string): Ainda não implementado, manter None.
+            - **descricao** (string, opcional): Nova descrição do item.
+            - **imagem** (string, opcional): Nova URL da imagem representativa do item.
 
             **Códigos de Resposta:**
             - **200 OK**: A edição do item foi bem-sucedida. As informações do item foram atualizadas com sucesso.
@@ -212,7 +212,7 @@ class ItemController:
                 "qntEmprestados": 30,
                 "qntDanificados": 5,
                 "descricao": "Nova descrição detalhada do item.",
-                "imagem": None
+                "imagem": "https://exemplo.com/imagem/novo_item.jpg"
             }
 
             # Token de autenticação de administrador
