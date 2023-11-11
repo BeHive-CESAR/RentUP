@@ -3,6 +3,7 @@
 from infra.configs.connection import DBConnectionHandler
 from infra.entities.itens import Itens
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import aliased
 import pandas as pd
 
 class ItensRepository:
@@ -127,40 +128,4 @@ class ItensRepository:
                 db.session.commit()
             except Exception as erro:
                 db.session.rollback()
-                raise erro
-    
-    def insert_excel(self, excel:str):
-        '''(DEPRECATED)Metodo responsavel por inserir no banco uma planiha excel, atualizando os valores dos itens ja existentes e adicionando os novos itens
-
-        Keyword arguments:
-
-        excel -- caminho para o arquivo da planilha
-        '''
-        try:
-            data_excel = pd.read_excel(excel)
-            data_excel = data_excel.iloc
-
-            for data in data_excel:
-                data = data.to_list()
-                if self.select_by_item(data[0]):
-                    self.update(data[0], int(data[1]), int(data[2]), int(data[3]), int(data[4]))
-                else:
-                    self.insert(data[0], int(data[1]), int(data[2]), int(data[3]), int(data[4]))
-        except Exception as erro:
-            raise erro
-    
-    def export_excel(self, excel_path:str='itens_bd.xlsx'):
-        '''(DEPRECATED)Metodo responsavel por exportar do banco uma planiha excel
-
-        Keyword arguments:
-
-        excel_path -- caminho onde deseja salvar a planilha (defalt itens_bd.xlsx)
-        '''
-        with DBConnectionHandler() as db:
-            try:
-                sql_consult = 'SELECT * FROM itens'
-                data = pd.read_sql_query(sql_consult, db.get_engine())
-                data.to_excel(excel_path, index=False)
-            except Exception as erro:
-                raise erro
-        
+                raise erro        
