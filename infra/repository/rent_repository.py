@@ -3,6 +3,7 @@ from infra.entities.rent import Rent
 from infra.configs.connection import DBConnectionHandler
 from infra.repository.user_repository import UserRepository
 from infra.repository.itens_repository import ItensRepository
+from api.entidades.Status import Status
 from sqlalchemy.orm.exc import NoResultFound
 
 class RentRepository:
@@ -70,6 +71,17 @@ class RentRepository:
                     'estado':rent2.estado
                 })
       
+            except Exception as erro:
+                db.session.rollback()
+                raise erro
+    
+    def update_status(self, rent:Rent, status:Status):
+        with DBConnectionHandler() as db:
+            try:
+                db.session.query(Rent).filter(Rent.id==rent.id).update({
+                    'estado':status
+                })
+                db.session.commit()
             except Exception as erro:
                 db.session.rollback()
                 raise erro

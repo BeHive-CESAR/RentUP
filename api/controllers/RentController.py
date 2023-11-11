@@ -34,14 +34,14 @@ class RentController:
         def get_history():
             pass
 
-        @self.router.get("/history/item")
+        @self.router.get("/history-item")
         def get_history_by_item(item):
             pass
 
-        @self.router.get("/history/user")
+        @self.router.get("/history-user")
         def get_history_by_user(user):
             pass
 
-        @self.router.get("/history/status")
-        def get_history_by_status(status):
+        @self.router.put("/update-status")
+        def update_status(rent, status):
             pass

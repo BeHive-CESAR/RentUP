@@ -6,6 +6,7 @@ from infra.entities.rent import Rent as RentDB
 from api.mediators.user_mediator import UserMediator
 from infra.repository.rent_repository import RentRepository
 from .item_mediator import ItemMediator, Item, BaseItem, ItensRepository
+from api.entidades.Status import Status
 
 class RentMediator:
     def __init__(self):
@@ -138,3 +139,15 @@ class RentMediator:
             )
         
         return rent_list
+    
+    def update_status(self, rent:Rent, stat:Status):
+        '''Atualiza o status do emprestimo'''
+        rent_db = self.repo.select_by_rent(rent)
+
+        if rent_db is None:
+            raise HTTPException(
+                detail="Emprestimo não encontrado",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+
+        self.repo.update_status(rent_db, stat)
