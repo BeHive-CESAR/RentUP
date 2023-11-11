@@ -3,8 +3,6 @@
 from infra.configs.connection import DBConnectionHandler
 from infra.entities.itens import Itens
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import aliased
-import pandas as pd
 
 class ItensRepository:
     '''Essa class é responsavel por conter os metodos que vamos precisar pro CRUD'''
