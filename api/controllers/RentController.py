@@ -31,8 +31,13 @@ class RentController:
                 return JSONResponse(status_code=e.status_code, content=e.detail)
 
         @self.router.get("/history")
-        def get_history():
-            pass
+        def get_history(self):
+        try:
+            history = RentMediator().get_history()
+            return JSONResponse(status_code=status.HTTP_200_OK, content=history)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
 
         @self.router.get("/history-item")
         def get_history_by_item(item):
