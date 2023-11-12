@@ -4,7 +4,7 @@ from fastapi import status
 from decouple import config
 import jwt
 from passlib.context import CryptContext
-from sqlalchemy.exc import ProgrammingError
+from sqlalchemy.exc import ProgrammingError, IntegrityError
 from fastapi.exceptions import HTTPException
 from api.entidades.Users import Users, UserAuth, UserCreation
 from infra.repository.user_repository import UserRepository, User
@@ -76,6 +76,7 @@ class UserMediator:
 
         name -- str que será validado
         '''
+        
         if len(name) < 3:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username deve ter pelo menos 3 digitos")
         
@@ -125,7 +126,13 @@ class UserMediator:
             contato=user.contato,
             papel=Role.USER.name
         )
-        self.user_repository.insert(user_db)
+        try:
+            self.user_repository.insert(user_db)
+        except IntegrityError:
+            raise HTTPException(
+                detail='Número de telefone já cadastrado',
+                status_code=status.HTTP_409_CONFLICT
+            )
         
 
     def get_users(self):
