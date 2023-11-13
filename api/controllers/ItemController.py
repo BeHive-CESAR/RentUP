@@ -10,7 +10,7 @@ class ItemController:
     def __init__(self):
         self.router = APIRouter()
 
-        @self.router.post("/create-item", dependencies=[Depends(auth_admin)])
+        @self.router.post("/create-item", dependencies=[Depends(auth_admin)]) #o @ pemite alterar a função para adicionar uma propriedade especifica
         async def create_item(item: Item):
             '''
             ### Criar Item

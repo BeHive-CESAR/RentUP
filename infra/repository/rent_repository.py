@@ -5,6 +5,7 @@ from infra.repository.user_repository import UserRepository
 from infra.repository.itens_repository import ItensRepository
 from api.entidades.Status import Status
 from sqlalchemy.orm.exc import NoResultFound
+from datetime import datetime
 
 class RentRepository:
     def insert(self, rent:Rent):
@@ -48,29 +49,23 @@ class RentRepository:
             except Exception as erro:
                 raise erro
 
-    def select_by_rent(self, rent:Rent):
+    def select_rent_by_id(self, id:int):
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Rent).filter(Rent.item_id==rent.item_id, Rent.user_id==rent.user_id,
-                                                     Rent.data_emprestimo==rent.data_emprestimo,Rent.data_devolucao==rent.data_devolucao,
-                                                     Rent.estado==rent.estado).one()
+                data = db.session.query(Rent).filter(Rent.id==id).one()
                 return data
             except NoResultFound:
                 return None
             except Exception as erro:
                 raise erro
 
-    def update(self, rent:Rent, rent2:Rent):
+    def update_return_date(self, rent_original_id:int, return_date:datetime):
         with DBConnectionHandler() as db:
             try:
-                db.session.query(Rent).filter(Rent.id==rent.id).update({
-                    'user_id':rent2.user_id,
-                    'item_id':rent2.item_id,
-                    'data_emprestimo':rent2.data_emprestimo,
-                    'data_devolucao':rent2.data_devolucao,
-                    'estado':rent2.estado
+                db.session.query(Rent).filter(Rent.id==rent_original_id).update({
+                    'data_devolucao':return_date,
                 })
-      
+                db.session.commit()
             except Exception as erro:
                 db.session.rollback()
                 raise erro

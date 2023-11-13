@@ -47,6 +47,22 @@ class UserRepository:
                 return None
             except Exception as erro:
                 raise erro
+        
+    def select_user_by_id(self, id:int):
+        '''Metodo responsavel por, através do id, buscar o User correspondente no banco de dados
+        
+        Keyword arguments:
+
+        user -- Objeto do tipo User que deve possuir o atributo id para realizar a busca
+        '''
+        with DBConnectionHandler() as db:
+            try:
+                data = db.session.query(User).filter(User.id==id).one()
+                return data
+            except NoResultFound:
+                return None
+            except Exception as erro:
+                raise erro
     
     def delete(self, users:User):
         '''Metodo responsavel por deletar um User do banco de dados

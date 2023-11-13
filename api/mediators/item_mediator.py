@@ -130,4 +130,15 @@ class ItemMediator:
         
         return item_on_db
     
+    def get_item_by_id(self, id:int):
+        '''Metodo responsavel por buscar o Item correspondente no banco de dados, caso não encontrado retorna None
+
+        Keyword arguments:
+
+        id -- Objeto do tipo int que será buscado
+        '''
+        item_on_db = self.repo.select_item_by_id(id)
+        
+        return item_on_db
+    
     

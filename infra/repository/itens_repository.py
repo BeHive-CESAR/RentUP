@@ -46,6 +46,20 @@ class ItensRepository:
             except Exception as erro:
                 raise erro
     
+    def select_item_by_id(self, id:int):
+        '''Metodo responsavel por, através do id, buscar o Itens correspondente no banco de dados
+        
+        Keyword arguments:
+
+        item -- Objeto do tipo Itens que deve possuir o atributo id para realizar a busca
+        '''
+        with DBConnectionHandler() as db:
+            try:
+                data = db.session.query(Itens).filter(Itens.id==id).one()
+                return data
+            except Exception as erro:
+                raise erro
+    
     def delete(self, item:Itens):
         '''Metodo responsavel por deletar um Itens do banco de dados
 
@@ -107,7 +121,7 @@ class ItensRepository:
                 db.session.rollback()
                 raise erro
     
-    def update_return(self, item:Itens):
+    def update_return(self, item_id:int):
         '''Metodo resonsavel por incrementar em 1 o atributo qnt_estoque e decrementar em 1 o qnt_emprestados de um Itens no banco de dados
 
         Keyword arguments:
@@ -116,8 +130,8 @@ class ItensRepository:
         '''
         with DBConnectionHandler() as db:
             try:
-                data = self.select_by_item(item)
-                db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).update(
+                data = self.select_item_by_id(item_id)
+                db.session.query(Itens).filter(Itens.id==item_id).update(
                     {
                         'qnt_emprestar':data.qnt_emprestar+1,
                         'qnt_emprestados':data.qnt_emprestados-1
