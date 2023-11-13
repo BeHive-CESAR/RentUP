@@ -1,7 +1,7 @@
 # RentUP
 > API favorita do Garagino!
 
-## 🤔 O que o RentUP? 
+## 🤔 O que é o RentUP? 
 O **RentUP** é uma **API para gerenciamento** de **estoque, usuários e empréstimos** para laboratórios maker
 
 Oferecendo:
@@ -33,7 +33,7 @@ Oferecendo:
     4. Clique na setinha ao lado do elefantinho e irá aparecer uma pasta chamada *Bancos de Dados*. Clique com o  botão direito sobre ela e selecione **Criar nova Banco de Dados**
     5. Preencha o nome do banco de dados como preferir! O nosso se chama RentUP 😁
     6. Agora vamos montar sua string de conexão com o banco! Ficará assim: **postgresql+pg8000://postgres:*SUASENHA*@localhost:5432/*NOMEDOSEUBANCODEDADOS*** . Deixa ela salva, pois vamos precisar jaja
-5. Clone o repositorio do RentUP e abra o projeto do seu VSCode (Ou a IDE que preferir)
+5. Clone o repositorio do RentUP e abra o projeto no seu VSCode (Ou a IDE que preferir)
 ### Preparando seu ambiente de desenvolvimento (No windows)
 1. Crie seu ambiente virtual 
 ```
@@ -54,6 +54,7 @@ SECRET_KEY= --- AQUI VOCÊ COLOCA UMA RANDOM HEX KEY ---
 ALGORITHM=HS256
 ``` 
 Pode gerar a Random Hex Key nesse site <a href="https://www.browserling.com/tools/random-hex">aqui</a>
+
 5. Ufa! Tudo pronto! Agora basta executar esses 2 comandos *(um de cada vez)* para rodar o projeto!
 ```
 alembic upgrade head
