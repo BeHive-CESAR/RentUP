@@ -4,6 +4,6 @@
       "builder": "NIXPACKS"
     },
     "deploy": {
-      "startCommand": "hypercorn api.main:app --bind \"[::]:$PORT\""
+      "startCommand": "sh ./railway.run.sh"
     }
   }
