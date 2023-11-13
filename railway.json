@@ -4,6 +4,6 @@
       "builder": "NIXPACKS"
     },
     "deploy": {
-      "startCommand": "sh ./railway.run.sh"
+      "startCommand": "sh ./startserver.sh"
     }
   }
