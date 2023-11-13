@@ -48,12 +48,10 @@ class RentRepository:
             except Exception as erro:
                 raise erro
 
-    def select_by_rent(self, rent:Rent):
+    def select_rent_by_id(self, id:int):
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Rent).filter(Rent.item_id==rent.item_id, Rent.user_id==rent.user_id,
-                                                     Rent.data_emprestimo==rent.data_emprestimo,Rent.data_devolucao==rent.data_devolucao,
-                                                     Rent.estado==rent.estado).one()
+                data = db.session.query(Rent).filter(Rent.id==id).one()
                 return data
             except NoResultFound:
                 return None

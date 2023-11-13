@@ -5,3 +5,4 @@ class Status(Enum):
     APPROVED = "APROVED"
     DISAPPROVED = "DISAPROVED"
     WAITING = "WAITING"
+    RETURNED = "RETURNED"

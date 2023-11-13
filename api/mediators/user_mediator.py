@@ -156,6 +156,15 @@ class UserMediator:
         nome -- str para busca do usuario
         '''
         return self.user_repository.select_by_name(nome)
+    
+    def get_user_by_id(self, id:int):
+        '''Retorna um usuario especifico a partir do id
+        
+        Keyword arguments:
+
+        id -- int para busca do usuario
+        '''
+        return self.user_repository.select_user_by_id(id)
 
     def edit_user(self, original_email:str, updated_user:Users):
         '''Realiza a validação do email e verifica se o mesmo existe no banco. Caso esteja tudo OK acessa o usuario e edita-o. Caso não retorna uma mensagem de erro
