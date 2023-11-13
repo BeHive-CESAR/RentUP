@@ -6,6 +6,7 @@ from api.mediators.user_mediator import UserMediator
 from infra.repository.rent_repository import RentRepository
 from .item_mediator import ItemMediator, BaseItem, ItensRepository, Itens
 from api.entidades.Status import Status
+from datetime import datetime
 
 class RentMediator:
     def __init__(self):
@@ -84,6 +85,7 @@ class RentMediator:
             )
         
         self.repo.update_status(rent_on_db, Status.RETURNED.name)
+        self.repo.update_return_date(rent_on_db.id, datetime.now())
         self.item_repo.update_return(rent_on_db.item_id)
 
     def get_history(self):
