@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 from api.entidades.Item import Item, BaseItem
 from api.mediators.item_mediator import ItemMediator
-from api.depends import auth_admin, auth_wrapper
+from api.depends import auth_admin
 import urllib.parse
 
 
@@ -110,7 +110,8 @@ class ItemController:
                 'qnt_emprestar': item.qnt_emprestar,
                 'qnt_emprestados': item.qnt_emprestados,
                 'qnt_danificados': item.qnt_danificados,
-                'descricao': item.descricao } for item in itens_list]
+                'descricao': item.descricao,
+                'imagem': item.imagem } for item in itens_list]
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content={"itens": item_data}
@@ -163,7 +164,8 @@ class ItemController:
                 'qnt_emprestar': item.qnt_emprestar,
                 'qnt_emprestados': item.qnt_emprestados,
                 'qnt_danificados': item.qnt_danificados,
-                'descricao': item.descricao }
+                'descricao': item.descricao,
+                'imagem': item.imagem }
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content={"item": item_data}
