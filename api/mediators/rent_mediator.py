@@ -1,6 +1,6 @@
 from fastapi import status
 from fastapi.exceptions import HTTPException
-from api.entidades.Rent import Rent, ReturnRent
+from api.entidades.Rent import Rent
 from infra.entities.rent import Rent as RentDB
 from api.mediators.user_mediator import UserMediator
 from infra.repository.rent_repository import RentRepository
@@ -28,13 +28,13 @@ class RentMediator:
         if item_atual is None:
             raise HTTPException(
                 detail="Item inexistente",
-                status_code=status.HTTP_400_BAD_REQUEST
+                status_code=status.HTTP_404_NOT_FOUND
             )
         
         if item_atual.qnt_emprestar==0:
             raise HTTPException(
                 detail="Item indisponível para empréstimo",
-                status_code=status.HTTP_400_BAD_REQUEST
+                status_code=status.HTTP_409_CONFLICT
             )
             
     
@@ -52,7 +52,7 @@ class RentMediator:
         if user is None:
             raise HTTPException(
                 detail="Usuário inexistente",
-                status_code=status.HTTP_400_BAD_REQUEST
+                status_code=status.HTTP_404_NOT_FOUND
             )
 
         rent_db=RentDB(
@@ -81,7 +81,7 @@ class RentMediator:
         if rent_on_db.estado == Status.RETURNED.name:
             raise HTTPException(
                 detail="Item já devolvido",
-                status_code=status.HTTP_400_BAD_REQUEST
+                status_code=status.HTTP_409_CONFLICT
             )
         
         self.repo.update_status(rent_on_db, Status.RETURNED.name)
@@ -105,7 +105,7 @@ class RentMediator:
         if item_on_db is None:
             raise HTTPException(
                 detail="Item inexistente",
-                status_code=status.HTTP_400_BAD_REQUEST
+                status_code=status.HTTP_404_NOT_FOUND
             )
 
         itens = self.repo.select_by_item(Itens(nome_item=item.nome.capitalize()))
@@ -124,7 +124,7 @@ class RentMediator:
         if user is None:
             raise HTTPException(
                 detail="Usuário inexistente",
-                status_code=status.HTTP_400_BAD_REQUEST
+                status_code=status.HTTP_404_NOT_FOUND
             )
         
         rent_list = self.repo.select_by_user(user.email)
