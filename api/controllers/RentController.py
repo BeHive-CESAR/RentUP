@@ -252,6 +252,13 @@ class RentController:
 
             '''
             history_user = RentMediator().get_history_by_user(user_email)
+
+            if len(history_user) == 0:
+                return JSONResponse(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    content={"message": "Nenhum empréstimo encontrado para o usuário especificado."}
+                )
+
             history_user_data = [{
                 'id': item_data.id,
                 'user': UserMediator().get_user_by_id(item_data.user_id).nome,
