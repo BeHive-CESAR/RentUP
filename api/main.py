@@ -32,6 +32,11 @@ Em relação a empréstimos, a **RentUP API** oferece as seguintes funcionalidad
 
 A **RentUP API** é uma ferramenta poderosa para facilitar o controle de recursos, gestão de usuários e todo o ciclo de empréstimos de itens em laboratórios maker.
 
+## Dados
+
+O **módulo de Dados** da API oferece endpoints para a obtenção de informações essenciais que podem ser utilizadas na criação de gráficos, facilitando a tomada de decisão
+por parte dos administradores. Esses dados oferecem insights valiosos sobre o estado e o desempenho do sistema, contribuindo para uma gestão eficiente e informada.
+
 '''
 
 tags_metadata = [
@@ -48,11 +53,16 @@ tags_metadata = [
         "name": "Rent",
         "description": "Operações com empréstimos"
     },
+    {
+        "name": "Data",
+        "description": "Dados para o dashboard"
+    
+    }
 ]
 
 app = FastAPI(title='RentUP API',
               description=description,
-              version='0.0.1',
+              version='0.0.2',
               summary="Garagino's favorite API",
               contact={
                     "name": 'Garagino',
