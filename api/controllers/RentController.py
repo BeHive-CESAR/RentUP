@@ -194,6 +194,12 @@ class RentController:
 
             '''
             history_item = RentMediator().get_history_by_item(BaseItem(nome=item))
+
+            if len(history_item) == 0:
+                return JSONResponse(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    content={"message": "Nenhum empréstimo encontrado para o item especificado."}
+                )
             
             history_item_data = [{
                 'id': item_data.id,
