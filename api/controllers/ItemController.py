@@ -23,7 +23,6 @@ class ItemController:
 
             **Corpo da Requisição:**
             - **nome** (string): Nome do novo item.
-            - **qntTotal** (integer): Quantidade total disponível do item.
             - **qntEstoque** (integer): Quantidade atual em estoque.
             - **qntEmprestar** (integer): Quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Quantidade atualmente emprestada.
@@ -184,7 +183,6 @@ class ItemController:
             **Corpo da Requisição:**
             - **nome_original** (string): O nome original do item a ser editado.
             - **nome** (string): Novo nome do item.
-            - **qntTotal** (integer): Nova quantidade total disponível do item.
             - **qntEstoque** (integer): Nova quantidade atual em estoque.
             - **qntEmprestar** (integer): Nova quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Nova quantidade atualmente emprestada.
