@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
-from api.entidades.Item import Item, BaseItem
+from api.entidades.Item import Item, BaseItem, ReturnItem
 from api.mediators.item_mediator import ItemMediator
 from api.depends import auth_admin
 import urllib.parse
@@ -23,7 +23,6 @@ class ItemController:
 
             **Corpo da Requisição:**
             - **nome** (string): Nome do novo item.
-            - **qntTotal** (integer): Quantidade total disponível do item.
             - **qntEstoque** (integer): Quantidade atual em estoque.
             - **qntEmprestar** (integer): Quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Quantidade atualmente emprestada.
@@ -43,7 +42,6 @@ class ItemController:
 
             dados_item = {
                 "nome": "Novo Item",
-                "qntTotal": 100,
                 "qntEstoque": 100,
                 "qntEmprestar": 80,
                 "qntEmprestados": 20,
@@ -185,7 +183,6 @@ class ItemController:
             **Corpo da Requisição:**
             - **nome_original** (string): O nome original do item a ser editado.
             - **nome** (string): Novo nome do item.
-            - **qntTotal** (integer): Nova quantidade total disponível do item.
             - **qntEstoque** (integer): Nova quantidade atual em estoque.
             - **qntEmprestar** (integer): Nova quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Nova quantidade atualmente emprestada.
@@ -208,7 +205,6 @@ class ItemController:
             dados_edicao_item = {
                 "nome_original": "NomeOriginalDoItem",
                 "nome": "Novo Nome do Item",
-                "qntTotal": 150,
                 "qntEstoque": 120,
                 "qntEmprestar": 90,
                 "qntEmprestados": 30,
