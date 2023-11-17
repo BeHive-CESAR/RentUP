@@ -10,7 +10,8 @@ class ItemMediator:
         self.repo = ItensRepository()    
 
     def __validate_item(self, item:Item):
-        '''Meotodo privado responsavel por validar o Item, caso esteja tudo OK, retorna False
+        '''DEPRECATED:
+        Meotodo privado responsavel por validar o Item, caso esteja tudo OK, retorna False
 
         Keyword arguments:
 
@@ -35,7 +36,7 @@ class ItemMediator:
 
         item -- Objeto do tipo Item que será criado no banco de dados
         '''
-        self.__validate_item(item)
+        # self.__validate_item(item)
         
         if self.get_item(item):
             raise HTTPException(
@@ -45,12 +46,12 @@ class ItemMediator:
         
         item_db = Itens(
             nome_item=item.nome.capitalize(),
-            qnt_total=item.qntTotal,
             qnt_estoque=item.qntEstoque,
             qnt_emprestar=item.qntEmprestar,
             qnt_emprestados=item.qntEmprestados,
             qnt_danificados=item.qntDanificados,
             descricao=item.descricao,
+            qnt_total=sum([item.qntEstoque, item.qntEmprestar, item.qntEmprestados, item.qntDanificados])
         )
         self.repo.insert(item_db)
         
@@ -64,7 +65,7 @@ class ItemMediator:
         
         item2 -- Objeto do tipo Item que deverá possuir os novos dados para substituir o item1 no banco
         '''
-        self.__validate_item(item2)
+        # self.__validate_item(item2)
         
         if self.get_item(item1) is None:
             raise HTTPException(
@@ -75,12 +76,12 @@ class ItemMediator:
         original_item = Itens(nome_item=item1.nome.capitalize()) 
         new_item = Itens(
             nome_item=item2.nome.capitalize(),
-            qnt_total=item2.qntTotal,
             qnt_estoque=item2.qntEstoque,
             qnt_emprestar=item2.qntEmprestar,
             qnt_emprestados=item2.qntEmprestados,
             qnt_danificados=item2.qntDanificados,
             descricao=item2.descricao,
+            qnt_total=sum([item2.qntEstoque, item2.qntEmprestar, item2.qntEmprestados, item2.qntDanificados])
         )
         self.repo.update(original_item, new_item)
         

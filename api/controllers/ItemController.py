@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
-from api.entidades.Item import Item, BaseItem
+from api.entidades.Item import Item, BaseItem, ReturnItem
 from api.mediators.item_mediator import ItemMediator
 from api.depends import auth_admin
 import urllib.parse
@@ -43,7 +43,6 @@ class ItemController:
 
             dados_item = {
                 "nome": "Novo Item",
-                "qntTotal": 100,
                 "qntEstoque": 100,
                 "qntEmprestar": 80,
                 "qntEmprestados": 20,
@@ -208,7 +207,6 @@ class ItemController:
             dados_edicao_item = {
                 "nome_original": "NomeOriginalDoItem",
                 "nome": "Novo Nome do Item",
-                "qntTotal": 150,
                 "qntEstoque": 120,
                 "qntEmprestar": 90,
                 "qntEmprestados": 30,
