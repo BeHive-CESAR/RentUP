@@ -127,7 +127,7 @@ uvicorn api.main:app --reload
 <div align="center">
  <a href="">
   
-  [![GoogleSites](https://img.shields.io/badge/Acessar%20Site%20-Google%20Sites-%)](https://sites.google.com/cesar.school/beehive/início)
+  [![GoogleSites](https://img.shields.io/badge/Acesse_nosso-Google_Sites-lima)](https://sites.google.com/cesar.school/beehive/início)
 
 </a>
 </div>
