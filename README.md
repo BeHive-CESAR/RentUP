@@ -10,7 +10,7 @@
 </div>
 
 ## 💡 <code>De onde surgiu ?</code>
-Bem vindo a mais um produto do grupo BeeHive, grupo de estudantes da faculdade CESAR School, desenvolvedores e entusiaastas de tecnologia e inovação.
+Bem vindo a mais um produto do grupo BeeHive, grupo de estudantes da faculdade CESAR School, desenvolvedores e entusiastas de tecnologia e inovação.
 Contando brevemente a historia desse projeto:
 
 Nessa oportunidade tivemos o prazer de trabalhar juntamente ao Garagino (Grupo de estudo cientifico dos alunos da CESAR), que chegaram ao nosso grupo com uma problematica bem clara:
@@ -30,13 +30,15 @@ Oferecendo:
 
 ## 🦄 <code>Por que usar o RentUP?</code>
   
-Agora você me pergunta, qual vantagem eu, como cliente, teria em usar o produto RentUp?
+Agora você me pergunta, qual vantagem que eu, como cliente, teria em usar o produto RentUp?
 
-A resposta é bem simples: a **flexibilidade** e **escalabilidade** do produto se diferenciam dos seus concorrentes no mercado.
+A resposta é bem simples: por ser uma API, a **flexibilidade** e **escalabilidade** do produto se diferenciam dos seus concorrentes no mercado.
 
-Adentrándonos um pouco mais no assunto, sabe quando é necessário que haja uma mudança ou adaptação no produto já feito? Seja em relação à atualização de uma tecnologia diferente ou até mesmo uma evolução do sistema? A nossa solução cobre exatamente esse problema. Sendo uma API, a manutenção e a ligação com o front-end desejado são simples e práticas de se fazer. Em pouco tempo, é possível se adaptar a alguma demanda.
+Tornando qualquer tipo de integração com o front-end desejado, simples e prática de se fazer. Em pouco tempo, é possível se adaptar a qualquer demanda.
 
-Então a pergunta certa seria, ***Porque não usar?*** <sub>pergunta sem resposta</sub> 
+Sabe quando é necessário que haja uma mudança ou adaptação no produto já feito? Seja em relação à atualização de uma tecnologia ou até mesmo uma evolução de sistema? A nossa solução cobre exatamente esse problema. Sendo uma API, qualquer tipo de integração com o front-end desejado, é simples e prática de se fazer. Em pouco tempo, é possível se adaptar a qualquer demanda.
+
+Então a pergunta certa seria, ***Porque não usar?*** 
 
 ## 🧑‍💻 <code>Tecnologias usadas no desenvolvimento</code>
 
@@ -60,15 +62,15 @@ Então a pergunta certa seria, ***Porque não usar?*** <sub>pergunta sem respost
 
 </div>
 
-## ⚙️ <code>RentUP já em utilização</code>
+## 💻 <code>Utilizando o RentUP</code>
 Para garantir o funcionamento e aplicação da API desenvolvida, colocamos ela em funcionamento juntamente ao framework *StreamLit*, que é uma ferramenta para contrução de interfaces web.
 
 A utilização dessa ferramenta foi realizada devido à agilidade que ela proporciona à equipe.
 
 <div align="center" justify-content= "space-around">
 
-[User Interfaces](https://github.com/BeHive-CESAR/frontUserRentUp) |
-[Admin Interfaces](https://github.com/BeHive-CESAR/frontAdmRentUp)
+[Interface Usuário](https://github.com/BeHive-CESAR/frontUserRentUp) |
+[Interface Administrador](https://github.com/BeHive-CESAR/frontAdmRentUp)
 
 </div>
 
