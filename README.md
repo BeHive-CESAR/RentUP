@@ -7,8 +7,6 @@
 <img src="https://github.com/BeHive-CESAR/RentUP/assets/117690607/2a0d2de7-1df5-4219-8241-7c4bb4bc9436" width="700px" />
 </div>
 
-> API favorita do Garagino!
-
 ## 💡 <code>De onde surgiu ?</code>
 Bem vindo a mais um produto do grupo BeeHive, grupo de estudantes da faculdade CESAR School, desenvolvedores e entusiaastas de tecnologia e inovação.
 Contando brevemente a historia desse projeto:
@@ -41,37 +39,37 @@ Então a pergunta certa seria, ***Porque não usar?*** <sub>pergunta sem respost
 ## 🧑‍💻 <code>Tecnologias usadas no desenvolvimento</code>
 
 <h2 align="center">
-  <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=bluee" alt="size" />
-  <img src="https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=whitee" alt="SQL" />
-  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PG" />
+  <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" alt="Python" />
+  
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostGreSQL" />
   <img src="https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white" alt="FastAPI" />
   <img src="https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white" alt="vscode" />
 </h2>
 
+<div align="center">
+
 | Tecnologia | Descriçao | Versão |
 |:---:|---------|:-----------:|
 |  **Python**  |Back-end do projeto e contrução da APi| <img src="https://img.shields.io/badge/3.11.2-black" /> |
-|  **FastAPI**  |Framework|    <img src="https://img.shields.io/badge/3.11.2-black" />       |
-|  **PostgreSQL**  |Controle do banco de dados utilizado|    <img src="https://img.shields.io/badge/3.11.2-black" /> |
-|  **Alambic**  | *** |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
-|  **SqlAlchemy**  | *** |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
+|  **FastAPI**  |Framework usar para criação de API Rest|    <img src="https://img.shields.io/badge/3.11.2-black" />       |
+|  **PostgreSQL**  |Banco de dados utilizado|    <img src="https://img.shields.io/badge/3.11.2-black" /> |
+|  **Alambic**  | Ferramenta usada para migrações do banco de dados |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
+|  **SqlAlchemy**  | ORM utilizado para controle do banco de dados |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
 
-- Python
-  - ...
-- FastAPI
-  - ...
-- PostgreSQL
-  - ...
-- Alambic
-  - ...
-- SqlAlchemy
-  - ...
+</div>
 
 ## ⚙️ <code>RentUP já em utilização</code>
-Para garantir o funcionamento e aplicação da API desenvolvida, colocamos ela em aplicação juntamente a ferramenta *StreamLit*, que é apenas um facilitador de contrução para o front-end.
+Para garantir o funcionamento e aplicação da API desenvolvida, colocamos ela em funcionamento juntamente ao framework *StreamLit*, que é uma ferramenta para contrução de interfaces web.
 
-A utilização dessa ferramenta foi realizada devido ao curto prazo que a equipo possuia.
-*(Codigo da aplicação presente no repositório do BeeHive)*
+A utilização dessa ferramenta foi realizada devido à agilidade que ela proporciona à equipe.
+
+<div align="center" justify-content= "space-around">
+
+[User Interfaces](https://github.com/BeHive-CESAR/frontUserRentUp) |
+[Admin Interfaces](https://github.com/BeHive-CESAR/frontAdmRentUp)
+
+</div>
+
 
 Segue algumas imagens e gifs do funcionamento dela nessa aplicação, validadando assim seu funcionamento.
 
@@ -122,9 +120,11 @@ uvicorn api.main:app --reload
 ```
 
 ## <code>Mais detalhes - Google Sites</code>
+<div align="center">
  <a href="">
   <img src="https://img.shields.io/badge/Acessar%20Site%20-Google Sites-%">
 </a>
+</div>
 
 
 ##
