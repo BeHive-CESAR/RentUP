@@ -42,7 +42,7 @@ class UsersController:
                 "cargo": "USER"
             }
 
-            response = requests.post("https://rentup.com/user/register", data=data)
+            response = requests.post("https://rentup.up.railway.app/user/register", data=data)
             if response.status_code == 201:
                 print("Novo usuário registrado com sucesso.")
             else:
@@ -81,7 +81,7 @@ class UsersController:
                 "password": "senha_segura"
             }
 
-            response = requests.post("https://rentup.com/user/login", data=data)
+            response = requests.post("https://rentup.up.railway.app/user/login", data=data)
             if response.status_code == 200:
                 token = response.json()["token"]
                 print(f"Usuário autenticado com sucesso. Token de acesso: {token}")
@@ -124,7 +124,7 @@ class UsersController:
             # Token de autenticação de usuário administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.get("https://rentup.com/user/get-users", headers=headers)
+            response = requests.get("https://rentup.up.railway.app/user/get-users", headers=headers)
             if response.status_code == 200:
                 usuarios = response.json()
                 for usuario in usuarios:
@@ -175,7 +175,7 @@ class UsersController:
             # Token de autenticação de usuário administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.get(f"https://rentup.com/user/get-user-by-name?nome={nome_do_usuario}", headers=headers)
+            response = requests.get(f"https://rentup.up.railway.app/user/get-user-by-name?nome={nome_do_usuario}", headers=headers)
             if response.status_code == 200:
                 usuario = response.json()
                 print(f"Informações do usuário {nome_do_usuario}:{usuario}")
@@ -236,7 +236,7 @@ class UsersController:
                 "cargo": "User"
             }
 
-            response = requests.put(f"https://exemplo.com/user/edit-user?email={email_do_usuario}", data=novos_dados, headers=headers)
+            response = requests.put(f"https://rentup.up.railway.app/user/edit-user?email={email_do_usuario}", data=novos_dados, headers=headers)
             if response.status_code == 200:
                 print(f"Informações do usuário com o email {email_do_usuario} foram atualizadas com sucesso.")
             else:
@@ -277,7 +277,7 @@ class UsersController:
             # Token de autenticação de usuário administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.delete(f"https://rentup.com/user/delete-user?email={email_do_usuario}", headers=headers)
+            response = requests.delete(f"https://rentup.up.railway.app/user/delete-user?email={email_do_usuario}", headers=headers)
             if response.status_code == 204:
                 print(f"Usuário com o email {email_do_usuario} foi excluído com sucesso.")
             else:
@@ -322,7 +322,7 @@ class UsersController:
             # Token de autenticação de administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.put(f"https://rentup.com/user/edit-role?email={email_do_usuario}&role={nova_role}", headers=headers)
+            response = requests.put(f"https://rentup.up.railway.app/user/edit-role?email={email_do_usuario}&role={nova_role}", headers=headers)
             if response.status_code == 200:
                 print(f"Papel do usuário com o e-mail {email_do_usuario} atualizado para {nova_role} com sucesso.")
             else:

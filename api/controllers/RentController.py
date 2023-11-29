@@ -49,7 +49,7 @@ class RentController:
                 "status": "WAITING"
             }
 
-            response = requests.post("https://rentup.com/rent/rent", json=dados_emprestimo, headers=headers)
+            response = requests.post("https://rentup.up.railway.app/rent/rent", json=dados_emprestimo, headers=headers)
             if response.status_code == 201:
                 print("Empréstimo realizado com sucesso.")
             else:
@@ -92,7 +92,7 @@ class RentController:
             # ID do empréstimo a ser devolvido
             rent_id = "123"
 
-            response = requests.put(f"https://rentup.com/rent/return?rent_id={rent_id}", headers=headers)
+            response = requests.put(f"https://rentup.up.railway.app/rent/return?rent_id={rent_id}", headers=headers)
             if response.status_code == 200:
                 print(f"Devolução do item para o empréstimo {rent_id} realizada com sucesso.")
             else:
@@ -131,7 +131,7 @@ class RentController:
             # Token de autenticação de administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.get("https://rentup.com/rent/history", headers=headers)
+            response = requests.get("https://rentup.up.railway.app/rent/history", headers=headers)
             if response.status_code == 200:
                 historico_emprestimos = response.json()
                 for emprestimo in historico_emprestimos:
@@ -184,7 +184,7 @@ class RentController:
             # Nome do item para o qual deseja-se recuperar o histórico
             nome_do_item = "Item A"
 
-            response = requests.get(f"https://rentup.com/rent/history-item?item={nome_do_item}", headers=headers)
+            response = requests.get(f"https://rentup.up.railway.app/rent/history-item?item={nome_do_item}", headers=headers)
             if response.status_code == 200:
                 historico_emprestimos = response.json()
                 for emprestimo in historico_emprestimos:
@@ -242,7 +242,7 @@ class RentController:
             # E-mail do usuário para o qual deseja-se recuperar o histórico
             email_do_usuario = "usuario@example.com"
 
-            response = requests.get(f"https://rentup.com/rent/history-user?user_email={email_do_usuario}", headers=headers)
+            response = requests.get(f"https://rentup.up.railway.app/rent/history-user?user_email={email_do_usuario}", headers=headers)
             if response.status_code == 200:
                 historico_emprestimos = response.json()
                 for emprestimo in historico_emprestimos:
@@ -306,7 +306,7 @@ class RentController:
             # Novo status do empréstimo (por exemplo, "APPROVED", "DISAPPROVED", "WAITING", "RETURNED")
             novo_status = "APPROVED"
 
-            response = requests.put(f"https://rentup.com/rent/update_status?id_rent={id_do_emprestimo}&stat={novo_status}", headers=headers)
+            response = requests.put(f"https://rentup.up.railway.app/rent/update_status?id_rent={id_do_emprestimo}&stat={novo_status}", headers=headers)
             if response.status_code == 200:
                 print(f"Status do empréstimo {id_do_emprestimo} atualizado para {novo_status} com sucesso.")
             else:

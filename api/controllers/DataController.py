@@ -66,7 +66,7 @@ class DataController:
             # Token de autenticação do administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.get("https://rentup.com/data/dashboard", headers=headers)
+            response = requests.get("https://rentup.up.railway.app/data/dashboard", headers=headers)
             if response.status_code == 200:
                 dados_painel_controle = response.json()
                 print(dados_painel_controle)

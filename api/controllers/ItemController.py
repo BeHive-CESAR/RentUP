@@ -53,7 +53,7 @@ class ItemController:
             # Token de autenticação de administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.post("https://rentup.com/item/create-item", json=dados_item, headers=headers)
+            response = requests.post("https://rentup.up.railway.app/item/create-item", json=dados_item, headers=headers)
             if response.status_code == 201:
                 print("Novo item criado com sucesso.")
             else:
@@ -92,7 +92,7 @@ class ItemController:
             # Token de autenticação de usuário
             headers = {"Authorization": "Bearer <token_do_usuario>"}
 
-            response = requests.get("https://rentup.com/item/get-items", headers=headers)
+            response = requests.get("https://rentup.up.railway.app/item/get-items", headers=headers)
             if response.status_code == 200:
                 itens = response.json()
                 for item in itens:
@@ -122,7 +122,7 @@ class ItemController:
 
             Recupera informações de um item específico com base no seu nome.
 
-            **Endpoint:** `GET /item/get-item-by-name?nome=<nome_do_item>`
+            **Endpoint:** `GET /item/get-item-by-name?item=<nome_do_item>`
 
             **Parâmetros da Requisição:**
             - **nome** (string): O nome do item que deseja consultar.
@@ -141,7 +141,7 @@ class ItemController:
             # Token de autenticação de usuário
             headers = {"Authorization": "Bearer <token_do_usuario>"}
 
-            response = requests.get(f"https://rentup.com/item/get-item-by-name?nome={nome_do_item}", headers=headers)
+            response = requests.get(f"https://rentup.up.railway.app/item/get-item-by-name?nome={nome_do_item}", headers=headers)
             if response.status_code == 200:
                 item = response.json()
                 print(f"Informações do item {nome_do_item}: {item}")
@@ -216,7 +216,7 @@ class ItemController:
             # Token de autenticação de administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.put("https://rentup.com/item/edit-item", json=dados_edicao_item, headers=headers)
+            response = requests.put("https://rentup.up.railway.app/item/edit-item", json=dados_edicao_item, headers=headers)
             if response.status_code == 200:
                 print(f"Informações do item {dados_edicao_item['nome_original']} foram atualizadas com sucesso.")
             else:
@@ -260,7 +260,7 @@ class ItemController:
             # Token de autenticação de administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.delete("https://rentup.com/item/delete-item", json=dados_exclusao_item, headers=headers)
+            response = requests.delete("https://rentup.up.railway.app/item/delete-item", json=dados_exclusao_item, headers=headers)
             if response.status_code == 204:
                 print(f"Item {dados_exclusao_item['nome']} excluído com sucesso.")
             else:
