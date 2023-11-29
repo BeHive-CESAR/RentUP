@@ -1,7 +1,25 @@
-# RentUP
+<h2 align="center">
+ <img src="https://img.shields.io/badge/REPO Size-231 KB-blue?style=for-the-badge" alt="size" />
+  <img src="https://img.shields.io/badge/Languages-1-blue?style=for-the-badge" alt="Server Ok" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?color=blue&style=for-the-badge" alt="License" />
+</h2>
+<div align="center">
+<img src="https://github.com/BeHive-CESAR/RentUP/assets/117690607/2a0d2de7-1df5-4219-8241-7c4bb4bc9436" width="700px" />
+</div>
+
 > API favorita do Garagino!
 
-## 🤔 O que é o RentUP? 
+## 💡 <code>De onde surgiu ?</code>
+Bem vindo a mais um produto do grupo BeeHive, grupo de estudantes da faculdade CESAR School, desenvolvedores e entusiaastas de tecnologia e inovação.
+Contando brevemente a historia desse projeto:
+
+Nessa oportunidade tivemos o prazer de trabalhar juntamente ao Garagino (Grupo de estudo cientifico dos alunos da CESAR), que chegaram ao nosso grupo com uma problematica bem clara:
+- A falta de um sistema que os ajudasse a monitorar os equipamentos do laboratório.
+- A falta de controle dos empréstimos que são realizados pelo laboratório,  atualmente isso é feito de uma forma muito desestruturada.
+
+A partir de encontros com responsáveis pelo Garagino nós imergimos no problema para vir com a melhor solução para eles, e após todo processo nós criamos o RentUp.
+
+## 🤔 <code>O que é o RentUP? </code>
 O **RentUP** é uma **API para gerenciamento** de **estoque, usuários e empréstimos** para laboratórios maker
 
 Oferecendo:
@@ -10,17 +28,39 @@ Oferecendo:
 - Controle e acompanhamento de estoque em tempo real
 - Inferencia de dados, auxiliando o gerente do lab na tomada de decisões
 
-## 🦄 Por que usar o RentUP?
-  Escrever o diferenial aqui
+## 🦄 <code>Por que usar o RentUP?</code>
+  
+Agora você me pergunta, qual vantagem eu, como cliente, teria em usar o produto RentUp?
 
-## 🧑‍💻 Tecnologias usadas no desenvolvimento
+A resposta é bem simples: a **flexibilidade** e **escalabilidade** do produto se diferenciam dos seus concorrentes no mercado.
+
+Adentrándonos um pouco mais no assunto, sabe quando é necessário que haja uma mudança ou adaptação no produto já feito? Seja em relação à atualização de uma tecnologia diferente ou até mesmo uma evolução do sistema? A nossa solução cobre exatamente esse problema. Sendo uma API, a manutenção e a ligação com o front-end desejado são simples e práticas de se fazer. Em pouco tempo, é possível se adaptar a alguma demanda.
+
+Então a pergunta certa seria, ***Porque não usar?*** <sub>pergunta sem resposta</sub> 
+
+## 🧑‍💻 <code>Tecnologias usadas no desenvolvimento</code>
+
+<h2 align="center">
+  <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=bluee" alt="size" />
+  <img src="https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=whitee" alt="SQL" />
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PG" />
+  <img src="https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white" alt="vscode" />
+</h2>
+
+- Python
+- FastAPI
+- PostgreSQL
+- Alambic
+- SqlAlchemy
+
   Escrever aqui as tecnologias usadas e pq
   (FastAPI, PostgreSQL, Python, Alambic, SqlAlchemy)
 
-## ⚙️ Instruções de instalação
+## ⚙️ <code>Instruções de instalação</code>
 
 - Linguagem Utilizada
-    - ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+    - Python
     -  Utilizamos a versão 3.11.2!
 ### Instalando e configurando o postgreSQL
 1. Instale o <a src="https://www.postgresql.org/download/">PostgreSQL</a>
@@ -61,11 +101,14 @@ alembic upgrade head
 uvicorn api.main:app --reload
 ```
 
-
+## <code>Mais detalhes - Google Sites</code>
+ <a href="">
+  <img src="https://img.shields.io/badge/Acessar%20Site%20-Google Sites-%">
+</a>
 
 
 ##
-## Desenvolvido por:
+## <code>Desenvolvido por:</code>
 <div align="center">
   <table>
     <tr>
