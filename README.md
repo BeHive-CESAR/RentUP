@@ -3,8 +3,10 @@
   <img src="https://img.shields.io/badge/Languages-1-blue?style=for-the-badge" alt="Server Ok" />
   <img src="https://img.shields.io/badge/License-MIT-blue?color=blue&style=for-the-badge" alt="License" />
 </h2>
-<div align="center">
-<img src="https://github.com/BeHive-CESAR/RentUP/assets/117690607/2a0d2de7-1df5-4219-8241-7c4bb4bc9436" width="700px" />
+<div align="center" alt="RentUpLogo">
+ 
+ ![rentup-removebg-preview](https://github.com/BeHive-CESAR/RentUP/assets/114539692/0e52f689-4465-459c-ba1c-0bd0cc6ea1c4)
+
 </div>
 
 ## 💡 <code>De onde surgiu ?</code>
@@ -51,10 +53,10 @@ Então a pergunta certa seria, ***Porque não usar?*** <sub>pergunta sem respost
 | Tecnologia | Descriçao | Versão |
 |:---:|---------|:-----------:|
 |  **Python**  |Back-end do projeto e contrução da APi| <img src="https://img.shields.io/badge/3.11.2-black" /> |
-|  **FastAPI**  |Framework usar para criação de API Rest|    <img src="https://img.shields.io/badge/3.11.2-black" />       |
-|  **PostgreSQL**  |Banco de dados utilizado|    <img src="https://img.shields.io/badge/3.11.2-black" /> |
-|  **Alambic**  | Ferramenta usada para migrações do banco de dados |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
-|  **SqlAlchemy**  | ORM utilizado para controle do banco de dados |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
+|  **FastAPI**  |Framework usar para criação de API Rest|    <img src="https://img.shields.io/badge/0.103.2-black" />       |
+|  **PostgreSQL**  |Banco de dados utilizado|    <img src="https://img.shields.io/badge/15.3-black" /> |
+|  **Alambic**  | Ferramenta usada para migrações do banco de dados |    <img src="https://img.shields.io/badge/1.12.1-black" /> |
+|  **SqlAlchemy**  | ORM utilizado para controle do banco de dados |    <img src="https://img.shields.io/badge/2.0.20-black" /> |
 
 </div>
 
