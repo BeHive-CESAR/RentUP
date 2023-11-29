@@ -67,6 +67,16 @@ Então a pergunta certa seria, ***Porque não usar?*** <sub>pergunta sem respost
 - SqlAlchemy
   - ...
 
+## ⚙️ <code>RentUP já em utilização</code>
+Para garantir o funcionamento e aplicação da API desenvolvida, colocamos ela em aplicação juntamente a ferramenta *StreamLit*, que é apenas um facilitador de contrução para o front-end.
+
+A utilização dessa ferramenta foi realizada devido ao curto prazo que a equipo possuia.
+*(Codigo da aplicação presente no repositório do BeeHive)*
+
+Segue algumas imagens e gifs do funcionamento dela nessa aplicação, validadando assim seu funcionamento.
+
+Inserir gif e imagem :)
+
 ## ⚙️ <code>Instruções de instalação</code>
 
 - Linguagem Utilizada
