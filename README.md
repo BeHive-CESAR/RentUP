@@ -48,14 +48,24 @@ Então a pergunta certa seria, ***Porque não usar?*** <sub>pergunta sem respost
   <img src="https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white" alt="vscode" />
 </h2>
 
-- Python
-- FastAPI
-- PostgreSQL
-- Alambic
-- SqlAlchemy
+| Tecnologia | Descriçao | Versão |
+|:---:|---------|:-----------:|
+|  **Python**  |Back-end do projeto e contrução da APi| <img src="https://img.shields.io/badge/3.11.2-black" /> |
+|  **FastAPI**  |Framework|    <img src="https://img.shields.io/badge/3.11.2-black" />       |
+|  **PostgreSQL**  |Controle do banco de dados utilizado|    <img src="https://img.shields.io/badge/3.11.2-black" /> |
+|  **Alambic**  | *** |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
+|  **SqlAlchemy**  | *** |    <img src="https://img.shields.io/badge/3.11.2-black" /> |
 
-  Escrever aqui as tecnologias usadas e pq
-  (FastAPI, PostgreSQL, Python, Alambic, SqlAlchemy)
+- Python
+  - ...
+- FastAPI
+  - ...
+- PostgreSQL
+  - ...
+- Alambic
+  - ...
+- SqlAlchemy
+  - ...
 
 ## ⚙️ <code>Instruções de instalação</code>
 
