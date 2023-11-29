@@ -5,7 +5,7 @@
 </h2>
 <div align="center" alt="RentUpLogo">
  
- ![rentup-removebg-preview](https://github.com/BeHive-CESAR/RentUP/assets/114539692/0e52f689-4465-459c-ba1c-0bd0cc6ea1c4)
+ ![rentup-logo](https://github.com/BeHive-CESAR/RentUP/assets/114539692/0e52f689-4465-459c-ba1c-0bd0cc6ea1c4)
 
 </div>
 
@@ -124,7 +124,9 @@ uvicorn api.main:app --reload
 ## <code>Mais detalhes - Google Sites</code>
 <div align="center">
  <a href="">
-  <img src="https://img.shields.io/badge/Acessar%20Site%20-Google Sites-%">
+  
+  [![GoogleSites](https://img.shields.io/badge/Acessar%20Site%20-Google%20Sites-%)](https://sites.google.com/cesar.school/beehive/início)
+
 </a>
 </div>
 
