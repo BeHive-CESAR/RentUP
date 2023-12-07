@@ -109,6 +109,7 @@ class ItemController:
                 'qnt_emprestar': item.qnt_emprestar,
                 'qnt_emprestados': item.qnt_emprestados,
                 'qnt_danificados': item.qnt_danificados,
+                'categoria': CategoryMediator().get_category_by_id(item.categoria_id).nome,
                 'descricao': item.descricao,
                 'imagem': item.imagem } for item in itens_list]
             return JSONResponse(
@@ -163,6 +164,7 @@ class ItemController:
                 'qnt_emprestar': item.qnt_emprestar,
                 'qnt_emprestados': item.qnt_emprestados,
                 'qnt_danificados': item.qnt_danificados,
+                'categoria': CategoryMediator().get_category_by_id(item.categoria_id).nome,
                 'descricao': item.descricao,
                 'imagem': item.imagem }
             return JSONResponse(
@@ -369,7 +371,7 @@ class ItemController:
                 'qnt_emprestados': item.qnt_emprestados,
                 'qnt_danificados': item.qnt_danificados,
                 'descricao': item.descricao,
-                'categoria': item.categoria,
+                'categoria': CategoryMediator().get_category_by_id(item.categoria_id).nome,
                 'imagem': item.imagem } for item in itens_list]
             return JSONResponse(
                 status_code=status.HTTP_200_OK,

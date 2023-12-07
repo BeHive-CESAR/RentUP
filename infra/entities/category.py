@@ -8,4 +8,4 @@ class Category(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String, nullable=False, unique=True)
     descricao = Column(Text, nullable=True)
-    itens = relationship('Itens', back_populates='category', cascade='all, delete-orphan')
+    itens = relationship('Itens', lazy='subquery', back_populates='category', cascade='all, delete-orphan')

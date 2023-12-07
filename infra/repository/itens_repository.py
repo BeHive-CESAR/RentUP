@@ -109,7 +109,7 @@ class ItensRepository:
                     'nome_item': item.nome_item,
                     'descricao': item.descricao,
                     'imagem': item.imagem,
-                    'categoria': item.categoria,
+                    'categoria_id': item.categoria_id,
                 })
                 db.session.commit()
             except Exception as erro:

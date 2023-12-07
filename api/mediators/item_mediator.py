@@ -2,11 +2,13 @@ from fastapi import status
 from fastapi.exceptions import HTTPException
 from api.entidades.Item import ItemQnt, BaseItem, ItemDescription, Item
 from infra.repository.itens_repository import ItensRepository, Itens
+from api.mediators.category_mediator import CategoryMediator
 from sqlalchemy.exc import ProgrammingError
 
 class ItemMediator:
     def __init__(self):
         self.repo = ItensRepository()    
+        self.category_mediator = CategoryMediator()
 
     def __validate_item(self, item:Item):
         '''DEPRECATED:
@@ -43,6 +45,14 @@ class ItemMediator:
                 status_code=status.HTTP_400_BAD_REQUEST
             )
         
+        categoria = self.category_mediator.get_category(item.categoria)
+
+        if categoria is None:
+            raise HTTPException(
+                detail="Categoria não existente",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
         item_db = Itens(
             nome_item=item.nome.capitalize(),
             qnt_estoque=item.qntEstoque,
@@ -50,6 +60,7 @@ class ItemMediator:
             qnt_emprestados=item.qntEmprestados,
             qnt_danificados=item.qntDanificados,
             descricao=item.descricao,
+            categoria_id=categoria.id,
             qnt_total=sum([item.qntEstoque, item.qntEmprestar, item.qntEmprestados, item.qntDanificados])
         )
         self.repo.insert(item_db)
@@ -104,12 +115,20 @@ class ItemMediator:
                     status_code=status.HTTP_409_CONFLICT
                 )
         
+        categoria = self.category_mediator.get_category(novo_item.categoria)
+
+        if categoria is None:
+            raise HTTPException(
+                detail="Categoria não existente",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
         new_item = Itens(
             id = self.get_item(item_atual).id,
             nome_item=novo_item.nome.capitalize(),
             descricao=novo_item.descricao,
             imagem=novo_item.imagem,
-            categoria=novo_item.categoria
+            categoria_id=categoria.id
         )
         self.repo.update_infos(new_item)
         
@@ -177,8 +196,10 @@ class ItemMediator:
 
         categoria -- Objeto do tipo str que será buscado
         '''
+        categoria = self.category_mediator.get_category(categoria)
+
         itens_on_db = self.get_all_items()
-        itens_on_db = [item for item in itens_on_db if item.categoria == categoria]
+        itens_on_db = [item for item in itens_on_db if item.categoria_id == categoria.id]
         
         if len(itens_on_db) == 0:
             raise HTTPException(

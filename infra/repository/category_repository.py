@@ -42,3 +42,11 @@ class CategoryRepository:
                 return None
             except Exception as erro:
                 raise erro
+    
+    def select_by_id(self, category_id:int):
+        with DBConnectionHandler() as db:
+            try:
+                data = db.session.query(Category).filter(Category.id==category_id).one()
+                return data
+            except Exception as erro:
+                raise erro

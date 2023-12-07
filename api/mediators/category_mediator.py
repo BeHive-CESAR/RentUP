@@ -35,6 +35,15 @@ class CategoryMediator:
         '''
         return self.repo.select_by_name(categoria.capitalize())
     
+    def get_category_by_id(self, categoria_id:int):
+        '''Verifica se a categoria existe no banco de dados
+        
+        Keyword arguments:
+
+        categoria -- Objeto do tipo Categoria que será verificado no banco de dados
+        '''
+        return self.repo.select_by_id(categoria_id)
+    
     def get_categories(self):
         '''Retorna todas as categorias do banco de dados'''
         return self.repo.select()
