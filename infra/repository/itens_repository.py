@@ -75,25 +75,40 @@ class ItensRepository:
                 db.session.rollback()
                 raise erro
     
-    def update(self, item:Itens, item2:Itens):
-        '''Metodo resonsavel por editar um Itens no banco de dados
+    def update_qnt(self, item:Itens):
+        '''Metodo resonsavel por editar as quantidade de um Itens no banco de dados
 
         Keyword arguments:
 
-        item -- Objeto do tipo Itens que deve possuir o atributo nome_item para realizar a busca
-
-        item2 -- Objeto do tipo Itens que deverá possuir os novos dados para substituir o registro já existente
+        item -- Objeto do tipo Itens que deve possuir o atributo id para realizar a busca
         '''
         with DBConnectionHandler() as db:
             try:
-                db.session.query(Itens).filter(Itens.nome_item==item.nome_item.capitalize()).update({
-                    'nome_item':item2.nome_item,
-                    'qnt_total': item2.qnt_total,
-                    'qnt_estoque': item2.qnt_estoque,
-                    'qnt_emprestar':item2.qnt_emprestar,
-                    'qnt_emprestados': item2.qnt_emprestados,
-                    'qnt_danificados': item2.qnt_danificados,
-                    'descricao': item2.descricao
+                db.session.query(Itens).filter(Itens.id==item.id).update({
+                    'qnt_total': item.qnt_total,
+                    'qnt_estoque': item.qnt_estoque,
+                    'qnt_emprestar':item.qnt_emprestar,
+                    'qnt_emprestados': item.qnt_emprestados,
+                    'qnt_danificados': item.qnt_danificados,
+                })
+                db.session.commit()
+            except Exception as erro:
+                db.session.rollback()
+                raise erro
+    
+    def update_infos(self, item:Itens):
+        '''Metodo resonsavel por editar as informações de um Itens no banco de dados
+
+        Keyword arguments:
+
+        item -- Objeto do tipo Itens que deve possuir o atributo id para realizar a busca
+        '''
+        with DBConnectionHandler() as db:
+            try:
+                db.session.query(Itens).filter(Itens.id==item.id).update({
+                    'nome_item': item.nome_item,
+                    'descricao': item.descricao,
+                    'imagem': item.imagem
                 })
                 db.session.commit()
             except Exception as erro:

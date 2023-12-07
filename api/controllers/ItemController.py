@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
-from api.entidades.Item import Item, BaseItem, ReturnItem
+from api.entidades.Item import Item, BaseItem, ItemDescription, ItemQnt
 from api.mediators.item_mediator import ItemMediator
 from api.depends import auth_admin
 import urllib.parse
@@ -169,32 +169,28 @@ class ItemController:
                 content={"item": item_data}
             )
 
-        @self.router.put("/edit-item", dependencies=[Depends(auth_admin)])
-        async def edit_item(item1: BaseItem, item2: Item):
+        @self.router.put("/edit-qnt-item", dependencies=[Depends(auth_admin)])
+        async def edit_qnt_item(item: ItemQnt):
             '''
-            ### Editar Item
+            ### Editar Quantidades do Item
 
-            Edita as informações de um item existente no estoque.
+            Edita as quantidades de um item existente no estoque.
 
-            **Endpoint:** `PUT /item/edit-item`
+            **Endpoint:** `PUT /item/edit-qnt-item`
 
             **Acesso:** Somente administradores autenticados.
 
             **Corpo da Requisição:**
-            - **nome_original** (string): O nome original do item a ser editado.
-            - **nome** (string): Novo nome do item.
+            - **nome** (string): Nome do item a ser editado.
             - **qntEstoque** (integer): Nova quantidade atual em estoque.
             - **qntEmprestar** (integer): Nova quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Nova quantidade atualmente emprestada.
             - **qntDanificados** (integer): Nova quantidade de itens danificados.
-            - **descricao** (string, opcional): Nova descrição do item.
-            - **imagem** (string, opcional): Nova URL da imagem representativa do item.
 
             **Códigos de Resposta:**
             - **200 OK**: A edição do item foi bem-sucedida. As informações do item foram atualizadas com sucesso.
             - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
-            - **400 Bad Request**: O nome do item não pode ser alterado.
-            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem criar itens.
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem editar itens.
             - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
             - **404 Not Found**: Nenhum item com o nome original especificado foi encontrado no estoque.
 
@@ -203,30 +199,84 @@ class ItemController:
             import requests
 
             dados_edicao_item = {
-                "nome_original": "NomeOriginalDoItem",
-                "nome": "Novo Nome do Item",
+                "nome_original": "NomeDoItem",
                 "qntEstoque": 120,
                 "qntEmprestar": 90,
                 "qntEmprestados": 30,
                 "qntDanificados": 5,
-                "descricao": "Nova descrição detalhada do item.",
-                "imagem": "https://exemplo.com/imagem/novo_item.jpg"
             }
 
             # Token de autenticação de administrador
             headers = {"Authorization": "Bearer <token_do_administrador>"}
 
-            response = requests.put("https://rentup.up.railway.app/item/edit-item", json=dados_edicao_item, headers=headers)
+            response = requests.put("https://rentup.up.railway.app/item/edit-qnt-item", json=dados_edicao_item, headers=headers)
             if response.status_code == 200:
                 print(f"Informações do item {dados_edicao_item['nome_original']} foram atualizadas com sucesso.")
             else:
                 print(f"Nenhum item com o nome original {dados_edicao_item['nome_original']} encontrado para edição.")
             '''
-            ItemMediator().edit_item(item1, item2)
+            ItemMediator().edit_qnt_item(item)
             return JSONResponse(
                 status_code=status.HTTP_200_OK,
                 content={"message": "Item editado com sucesso"}
             )
+        
+        @self.router.put("/edit-infos-item", dependencies=[Depends(auth_admin)])
+        async def edit_infos_item(item_atual:BaseItem, novo_item: ItemDescription):
+            '''
+            ### Editar informações do Item
+
+            Edita as informações de um item existente no estoque.
+
+            **Endpoint:** `PUT /item/edit-item`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Corpo da Requisição:**
+            - **nome_atual** (string): O nome original do item a ser editado.
+            - **nome** (string): Novo nome do item.
+            - **descricao** (string, opcional): Nova descrição do item.
+            - **imagem** (string, opcional): Nova URL da imagem representativa do item.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A edição do item foi bem-sucedida. As informações do item foram atualizadas com sucesso.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem editar itens.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+            - **404 Not Found**: Nenhum item com o nome original especificado foi encontrado no estoque.
+            - **409 Conflict**: Já existe um item com o nome especificado.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+
+            dados_edicao_item = {
+                "item_atual": {
+                    "nome": "NomeOriginalDoItem"
+                },
+                "novo_item": {
+                    "nome": "Novo Nome do Item",
+                    "descricao": "Nova descrição detalhada do item.",
+                    "imagem": "https://exemplo.com/imagem/novo_item.jpg"
+                }
+            }
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.put("https://rentup.up.railway.app/item/edit-infos-item", json=dados_edicao_item, headers=headers)
+            if response.status_code == 200:
+                print(f"Informações do item {dados_edicao_item['item_atual']['nome']} foram atualizadas com sucesso.")
+            else:
+                print(f"Nenhum item com o nome original {dados_edicao_item['item_atual']['nome']} encontrado para edição.")
+            '''
+            ItemMediator().edit_infos_item(item_atual, novo_item)
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content={"message": "Item editado com sucesso"}
+            )
+
         
         @self.router.delete("/delete-item", dependencies=[Depends(auth_admin)])
         async def delete_item(item: BaseItem):

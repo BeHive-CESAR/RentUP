@@ -1,7 +1,6 @@
 from fastapi import status
-from sqlalchemy.exc import IntegrityError
 from fastapi.exceptions import HTTPException
-from api.entidades.Item import Item, BaseItem
+from api.entidades.Item import ItemQnt, BaseItem, ItemDescription, Item
 from infra.repository.itens_repository import ItensRepository, Itens
 from sqlalchemy.exc import ProgrammingError
 
@@ -56,34 +55,61 @@ class ItemMediator:
         self.repo.insert(item_db)
         
     
-    def edit_item(self, item1:BaseItem, item2:Item):
-        '''Realiza a validação do item e verifica se o mesmo existe no banco. Caso esteja tudo OK acessa o item e edita-o. Caso não retorna uma mensagem de erro
+    def edit_qnt_item(self, item:ItemQnt):
+        '''Realiza a validação do item e verifica se o mesmo existe no banco. Caso esteja tudo OK acessa
+        o item e edita as quantidades no banco de dados. Caso não retorna uma mensagem de erro
 
         Keyword arguments:
 
-        item1 -- Objeto do tipo BaseItem que será buscado e editado
-        
-        item2 -- Objeto do tipo Item que deverá possuir os novos dados para substituir o item1 no banco
+        item -- Objeto do tipo Item que será buscado e editado
         '''
         # self.__validate_item(item2)
         
-        if self.get_item(item1) is None:
+        if self.get_item(item) is None:
             raise HTTPException(
                 detail="Item não encontrado",
                 status_code=status.HTTP_404_NOT_FOUND
             )
         
-        original_item = Itens(nome_item=item1.nome.capitalize()) 
         new_item = Itens(
-            nome_item=item2.nome.capitalize(),
-            qnt_estoque=item2.qntEstoque,
-            qnt_emprestar=item2.qntEmprestar,
-            qnt_emprestados=item2.qntEmprestados,
-            qnt_danificados=item2.qntDanificados,
-            descricao=item2.descricao,
-            qnt_total=sum([item2.qntEstoque, item2.qntEmprestar, item2.qntEmprestados, item2.qntDanificados])
+            id = self.get_item(item).id,
+            qnt_estoque=item.qntEstoque,
+            qnt_emprestar=item.qntEmprestar,
+            qnt_emprestados=item.qntEmprestados,
+            qnt_danificados=item.qntDanificados,
+            qnt_total=sum([item.qntEstoque, item.qntEmprestar, item.qntEmprestados, item.qntDanificados])
         )
-        self.repo.update(original_item, new_item)
+        self.repo.update_qnt(new_item)
+    
+    def edit_infos_item(self, item_atual:BaseItem, novo_item:ItemDescription):
+        '''Realiza a validação do item e verifica se o mesmo existe no banco. Caso esteja tudo OK acessa
+        o item e edita as informações no banco de dados. Caso não retorna uma mensagem de erro
+
+        Keyword arguments:
+
+        item_atual -- Objeto do tipo BaseItem que será buscado para ser alterado
+        novo_item -- Objeto do tipo ItemDescription que será inserido no lugar do item_atual
+        '''
+        
+        if self.get_item(item_atual) is None:
+            raise HTTPException(
+                detail="Item não encontrado",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+        
+        if novo_item.nome.capitalize() != item_atual.nome.capitalize():
+            if self.get_item(novo_item):
+                raise HTTPException(
+                    detail="Item com esse nome já existe",
+                    status_code=status.HTTP_409_CONFLICT
+                )
+        
+        new_item = Itens(
+            id = self.get_item(item_atual).id,
+            nome_item=novo_item.nome.capitalize(),
+            descricao=novo_item.descricao,
+        )
+        self.repo.update_infos(new_item)
         
     
     def delete_item(self, item:BaseItem):

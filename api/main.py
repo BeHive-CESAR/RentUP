@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from api.rotas import router
-from infra.configs.connection import DBConnectionHandler
 
 description = '''
 A **RentUP API** foi desenvolvida para resolver os desafios de gerenciamento de estoque e empréstimos em laboratórios maker.
@@ -73,8 +72,6 @@ app = FastAPI(title='RentUP API',
               redoc_url=False
               )
 
-with DBConnectionHandler() as db:
-    db.create_all_tables()
 
 @app.get('/', tags=['Root'], include_in_schema=False)
 async def root():
