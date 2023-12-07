@@ -8,6 +8,7 @@ class BaseItem(BaseModel):
 class ItemDescription(BaseItem):
     descricao: Optional[str] = ''
     imagem: Optional[str] = ''
+    categoria: Optional[str] = ''
 
 class ItemQnt(BaseItem):
     '''Classe para representar Itens que vêm da API'''

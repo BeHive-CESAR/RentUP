@@ -108,6 +108,8 @@ class ItemMediator:
             id = self.get_item(item_atual).id,
             nome_item=novo_item.nome.capitalize(),
             descricao=novo_item.descricao,
+            imagem=novo_item.imagem,
+            categoria=novo_item.categoria
         )
         self.repo.update_infos(new_item)
         

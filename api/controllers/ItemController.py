@@ -199,7 +199,7 @@ class ItemController:
             import requests
 
             dados_edicao_item = {
-                "nome_original": "NomeDoItem",
+                "nome": "NomeDoItem",
                 "qntEstoque": 120,
                 "qntEmprestar": 90,
                 "qntEmprestados": 30,
@@ -258,7 +258,8 @@ class ItemController:
                 "novo_item": {
                     "nome": "Novo Nome do Item",
                     "descricao": "Nova descrição detalhada do item.",
-                    "imagem": "https://exemplo.com/imagem/novo_item.jpg"
+                    "imagem": "https://exemplo.com/imagem/novo_item.jpg",
+                    "categoria": "Nova categoria do item."
                 }
             }
 

@@ -108,7 +108,8 @@ class ItensRepository:
                 db.session.query(Itens).filter(Itens.id==item.id).update({
                     'nome_item': item.nome_item,
                     'descricao': item.descricao,
-                    'imagem': item.imagem
+                    'imagem': item.imagem,
+                    'categoria': item.categoria,
                 })
                 db.session.commit()
             except Exception as erro:

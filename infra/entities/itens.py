@@ -19,6 +19,7 @@ class Itens(Base):
     qnt_danificados = Column(Integer, nullable=False)
     descricao = Column(String, nullable=True)
     imagem = Column(String, nullable=True)
+    categoria = Column(String, nullable=True)
     rents = relationship('Rent', back_populates='item', cascade='all, delete-orphan')
 
     def __repr__(self):
