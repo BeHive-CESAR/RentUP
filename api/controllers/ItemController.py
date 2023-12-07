@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 from api.entidades.Item import Item, BaseItem, ItemDescription, ItemQnt
 from api.mediators.item_mediator import ItemMediator
+from api.mediators.category_mediator import CategoryMediator, Categoria, CategoriaName
 from api.depends import auth_admin
 import urllib.parse
 
@@ -322,4 +323,198 @@ class ItemController:
             return JSONResponse(
                 content={"message": "Item excluído com sucesso"},
                 status_code=status.HTTP_200_OK,
-            )            
+            )
+
+        @self.router.get("/get-items-by-category")
+        async def get_items_by_category(categoria: str):
+            '''
+            ### Obter Itens por Categoria
+
+            Recupera uma lista de todos os itens disponíveis no estoque de uma categoria específica.
+
+            **Endpoint:** `GET /item/get-items-by-category?categoria=<nome_da_categoria>`
+
+            **Parâmetros da Requisição:**
+            - **categoria** (string): O nome da categoria que deseja consultar.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A solicitação foi bem-sucedida. Retorna uma lista de todos os itens da categoria especificada.
+            - **404 Not Found**: Não foram encontrados itens da categoria especificada no estoque.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            nome_da_categoria = "NomeDaCategoria"
+
+            # Token de autenticação de usuário
+            headers = {"Authorization": "Bearer <token_do_usuario>"}
+
+            response = requests.get(f"https://rentup.up.railway.app/item/get-items-by-category?categoria={nome_da_categoria}", headers=headers)
+            if response.status_code == 200:
+                itens = response.json()
+                for item in itens:
+                    print(item)
+            else:
+                print(f"Nenhum item da categoria {nome_da_categoria} encontrado no estoque.")
+            '''
+            categoria = urllib.parse.unquote(categoria)
+            itens_list = ItemMediator().get_items_by_category(categoria)
+            item_data = [{
+                'nome_item': item.nome_item,
+                'qnt_total': item.qnt_total,
+                'qnt_estoque': item.qnt_estoque,
+                'qnt_emprestar': item.qnt_emprestar,
+                'qnt_emprestados': item.qnt_emprestados,
+                'qnt_danificados': item.qnt_danificados,
+                'descricao': item.descricao,
+                'categoria': item.categoria,
+                'imagem': item.imagem } for item in itens_list]
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content={"itens": item_data}
+            )
+
+        @self.router.post("/create-category", dependencies=[Depends(auth_admin)])
+        async def create_category(categoria: Categoria):
+            '''
+            ### Criar Categoria
+
+            Cria uma nova categoria no estoque.
+
+            **Endpoint:** `POST /item/create-category`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Corpo da Requisição:**
+            - **nome** (string): Nome da nova categoria.
+            - **descricao** (string, opcional): Descrição da nova categoria.
+
+            **Códigos de Resposta:**
+            - **201 Created**: A categoria foi criada com sucesso.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem criar categorias.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+            - **409 Conflict**: Já existe uma categoria com o nome especificado.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            dados_categoria = {
+                "nome": "Nova Categoria",
+                "descricao": "Descrição detalhada da nova categoria."
+            }
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.post("https://rentup.up.railway.app/item/create-category", json=dados_categoria, headers=headers)
+            if response.status_code == 201:
+                print("Nova categoria criada com sucesso.")
+            else:
+                print("Falha na criação da categoria. Verifique os dados fornecidos ou suas permissões de administrador.")
+
+            '''
+            CategoryMediator().create_category(categoria)
+            return JSONResponse(
+                status_code=status.HTTP_201_CREATED,
+                content={"message": "Categoria criada com sucesso"}
+            )
+        
+        @self.router.get("/get-categories")
+        async def get_categories():
+            '''
+            ### Obter Todas as Categorias
+
+            Recupera uma lista de todas as categorias disponíveis no estoque.
+
+            **Endpoint:** `GET /item/get-categories`
+
+            **Acesso:** Somente usuários autenticados.
+
+            **Parâmetros da Requisição:**
+            - Nenhum.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A solicitação foi bem-sucedida. Retorna uma lista de todas as categorias.
+            - **404 Not Found**: Não foram encontradas categorias no estoque.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            # Token de autenticação de usuário
+            headers = {"Authorization": "Bearer <token_do_usuario>"}
+
+            response = requests.get("https://rentup.up.railway.app/item/get-categories", headers=headers)
+            if response.status_code == 200:
+                categorias = response.json()
+                for categoria in categorias:
+                    print(categoria)
+            else:
+                print("Nenhuma categoria encontrada no estoque.")
+            '''
+            categorias_list = CategoryMediator().get_categories()
+            categoria_data = [{
+                'nome': categoria.nome,
+                'descricao': categoria.descricao } for categoria in categorias_list]
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content={"categorias": categoria_data}
+            )
+        
+        @self.router.put("/edit-category", dependencies=[Depends(auth_admin)])
+        async def edit_category(categoria_atual:CategoriaName, nova_categoria: Categoria):
+            '''
+            ### Editar Categoria
+
+            Edita uma categoria existente no estoque.
+
+            **Endpoint:** `PUT /item/edit-category`
+
+            **Acesso:** Somente administradores autenticados.
+
+            **Corpo da Requisição:**
+            - **nome_atual** (string): O nome original da categoria a ser editada.
+            - **nome** (string): Novo nome da categoria.
+            - **descricao** (string, opcional): Nova descrição da categoria.
+
+            **Códigos de Resposta:**
+            - **200 OK**: A edição da categoria foi bem-sucedida. As informações da categoria foram atualizadas com sucesso.
+            - **400 Bad Request**: A solicitação não atende aos requisitos (por exemplo, campos em branco, formato inválido).
+            - **401 Unauthorized**: Acesso não autorizado. Somente administradores podem editar categorias.
+            - **403 Forbidden**: Falha na autenticação. O token de acesso fornecido não é válido.
+            - **404 Not Found**: Nenhuma categoria com o nome original especificado foi encontrada no estoque.
+            - **409 Conflict**: Já existe uma categoria com o nome especificado.
+
+            **Exemplo de Uso:**
+            ```python
+            import requests
+
+            dados_edicao_categoria = {
+                "categoria_atual": {
+                    "nome": "NomeOriginalDaCategoria"
+                },
+                "nova_categoria": {
+                    "nome": "NovoNomedaCategoria",
+                    "descricao": "Nova descrição detalhada da categoria."
+                }
+            }
+
+            # Token de autenticação de administrador
+            headers = {"Authorization": "Bearer <token_do_administrador>"}
+
+            response = requests.put("https://rentup.up.railway.app/item/edit-category", json=dados_edicao_categoria, headers=headers)
+            if response.status_code == 200:
+                print(f"Informações da categoria {dados_edicao_categoria['categoria_atual'][nome]} foram atualizadas com sucesso.")
+            else:
+                print(f"Nenhuma categoria com o nome original {dados_edicao_categoria['categoria_atual'][nome]} encontrada para edição.")
+            '''
+            CategoryMediator().edit_category(categoria_atual.nome ,nova_categoria)
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content={"message": "Categoria editada com sucesso"}
+            )

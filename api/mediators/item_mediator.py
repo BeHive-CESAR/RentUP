@@ -170,4 +170,22 @@ class ItemMediator:
         
         return item_on_db
     
+    def get_items_by_category(self, categoria:str):
+        '''Metodo responsavel por buscar os Itens correspondentes no banco de dados, caso não encontrado retorna None
+
+        Keyword arguments:
+
+        categoria -- Objeto do tipo str que será buscado
+        '''
+        itens_on_db = self.get_all_items()
+        itens_on_db = [item for item in itens_on_db if item.categoria == categoria]
+        
+        if len(itens_on_db) == 0:
+            raise HTTPException(
+                detail="Nenhum item encontrado para essa categoria",
+                status_code=status.HTTP_404_NOT_FOUND
+            )
+
+        return itens_on_db
+    
     

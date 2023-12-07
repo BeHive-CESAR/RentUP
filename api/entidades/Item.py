@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class Categoria(BaseModel):
+class CategoriaName(BaseModel):
     nome: str
+
+class Categoria(CategoriaName):
     descricao: Optional[str] = ''
 
 class BaseItem(BaseModel):

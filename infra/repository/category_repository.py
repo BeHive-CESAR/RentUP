@@ -33,10 +33,10 @@ class CategoryRepository:
                 db.session.rollback()
                 raise erro
 
-    def select_by_name(self, category:Category):
+    def select_by_name(self, category:str):
         with DBConnectionHandler() as db:
             try:
-                data = db.session.query(Category).filter(Category.nome==category.nome.capitalize()).one()
+                data = db.session.query(Category).filter(Category.nome==category.capitalize()).one()
                 return data
             except NoResultFound:
                 return None
