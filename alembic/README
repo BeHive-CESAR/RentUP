@@ -1,16 +1,19 @@
-Generic single-database configuration.
+# Instruções de uso do alembic
 
 Sempre que fizer uma modificação na estrutura do banco de dados executar:
-```
+
+```bash
 alembic revision --autogenerate -m "NomeDaVersão"
 ```
 
 Para avançar o banco de dados para a nova versão executar:
-```
+
+```bash
 alembic upgrade head
 ```
 
 Para voltar o banco de dados para uma verão anterior executar:
-```
+
+```bash
 alembic downgrade -1
 ```
