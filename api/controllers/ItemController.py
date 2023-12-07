@@ -28,6 +28,7 @@ class ItemController:
             - **qntEmprestar** (integer): Quantidade disponível para empréstimo.
             - **qntEmprestados** (integer): Quantidade atualmente emprestada.
             - **qntDanificados** (integer): Quantidade de itens danificados.
+            - **categoria** (string): Nome da categoria do item.
             - **descricao** (string, opcional): Descrição do item.
             - **imagem** (string, opcional): URL da imagem representativa do item.
 
@@ -48,6 +49,7 @@ class ItemController:
                 "qntEmprestados": 20,
                 "qntDanificados": 2,
                 "descricao": "Descrição detalhada do novo item.",
+                "categoria": "NomeDaCategoria",
                 "imagem": "https://exemplo.com/imagem/novo_item.jpg"
             }
 
@@ -239,6 +241,7 @@ class ItemController:
             - **nome_atual** (string): O nome original do item a ser editado.
             - **nome** (string): Novo nome do item.
             - **descricao** (string, opcional): Nova descrição do item.
+            - **categoria** (string): Nova categoria do item.
             - **imagem** (string, opcional): Nova URL da imagem representativa do item.
 
             **Códigos de Resposta:**
