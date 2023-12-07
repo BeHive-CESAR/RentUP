@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from decouple import config as decouple_config
-from infra.entities import itens, users, rent
+from infra.entities import itens, users, rent, category
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -26,6 +26,7 @@ config.set_main_option("sqlalchemy.url", db_url)
 target_metadata = itens.Base.metadata
 target_metadata = users.Base.metadata
 target_metadata = rent.Base.metadata
+target_metadata = category.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

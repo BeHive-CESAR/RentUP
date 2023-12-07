@@ -1,9 +1,7 @@
 '''Aqui usamos uma classe para criar nossa tabela e seus respectivos atributos'''
 
 from infra.configs.base import Base
-from infra.configs.connection import DBConnectionHandler
-from infra.entities.rent import Rent
-from sqlalchemy import Column, String, Integer, event
+from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 class Itens(Base):
@@ -19,8 +17,9 @@ class Itens(Base):
     qnt_danificados = Column(Integer, nullable=False)
     descricao = Column(String, nullable=True)
     imagem = Column(String, nullable=True)
-    categoria = Column(String, nullable=True)
+    categoria_id = Column(Integer, ForeignKey('category.id'), nullable=False)
     rents = relationship('Rent', back_populates='item', cascade='all, delete-orphan')
+    category = relationship('Category', back_populates='itens')
 
     def __repr__(self):
         '''Metodo mágico que é usado para representar o objeto como uma string que pode ser usada para criar um novo objeto com os mesmos valores.'''
